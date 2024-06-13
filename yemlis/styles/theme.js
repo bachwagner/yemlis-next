@@ -14,6 +14,15 @@ const nunito = Nunito({
     display: 'swap',
 });
 const theme = createTheme({
+    components:{
+        MuiFormHelperText:{
+            styleOverrides:{
+                root:{
+                    fontSize:16,
+                }
+            }
+        }
+    },
     palette: {
         mode: 'light',
         primary: {

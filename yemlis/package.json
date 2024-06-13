@@ -11,14 +11,17 @@
   "dependencies": {
     "@emotion/cache": "^11.11.0",
     "@fontsource/paytone-one": "^5.0.20",
+    "@hookform/resolvers": "^3.6.0",
     "@mui/material": "^5.15.19",
     "@mui/material-nextjs": "^5.15.11",
     "bcrypt": "^5.1.1",
+    "joi": "^17.13.1",
     "mongodb": "^6.7.0",
     "mongoose": "^8.4.1",
     "next": "14.2.3",
     "next-auth": "^4.24.7",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-hook-form": "^7.51.5"
   }
 }

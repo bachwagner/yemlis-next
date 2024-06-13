@@ -39,8 +39,9 @@ const pages = [
     { title: 'Rehber', href: '/guide' }]
 
 const signButtons = [
-    { title: 'Kayıt Ol', href: '/signup' },
-    { title: 'Giriş Yap', href: '/addFood' }]
+    { title: 'Giriş Yap', href: '/login' },
+    { title: 'Kayıt Ol', href: '/signup' }
+]
 
 const settings = [
     { title: 'Profil', href: '/profile' },
@@ -58,7 +59,7 @@ const AvatarImage = () => {
     />)
 }
 const logout = () => {
-    alert("Logged Out")
+
 }
 const LanguageSelector = ({ language, handleChange, isDark }) => {
     return (
@@ -95,7 +96,6 @@ export default function Nav() {
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
     const [language, setLanguage] = useState();
-    const [providers, setProviders] = useState(null);
 
     /* useEffect(() => {
         const setProviders = async () => {
@@ -105,7 +105,7 @@ export default function Nav() {
         }
     },[]) */
 
-    const isSignIn = true
+    const isSignIn = false
 
 
     const handleOpenNavMenu = (event) => {
@@ -233,6 +233,7 @@ export default function Nav() {
 
                             {!isSignIn && signButtons.map((page) => (
                                 <Button
+                                    key={page.title}
                                     href={page.href}
                                     LinkComponent={NextLink}
                                     variant="body2"
