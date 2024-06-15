@@ -1,44 +1,47 @@
 'use client'
-import React, { useState, useEffect } from 'react'
+import React from 'react'
+import { joiResolver } from "@hookform/resolvers/joi";
+import { useForm } from 'react-hook-form';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import { useFormState, useFormStatus } from 'react-dom'
-//import { useForm, Controller, useFormState } from "react-hook-form"
-import CustomLink from '../inputs/CustomLink';
 import TextField from '@mui/material/TextField';
-import { authenticate } from '@/app/lib/actions';
-import { useForm } from 'react-hook-form';
-import { joiResolver } from "@hookform/resolvers/joi";
-import Joi from "joi";
-import { Alert } from '@mui/material';
-
-//import ErrorMessage from "../../../components/layouts/ErrorMessage"
-
+import Alert from '@mui/material/Alert';
+import FormControl from '@mui/material/FormControl';
+import GoogleIcon from '@mui/icons-material/Google';
+import { useFormState, useFormStatus } from 'react-dom'
+import CustomLink from '../inputs/CustomLink';
+import { authLogin } from '@/app/lib/actions';
+import { login as loginValidation } from '../../app/lib/validationSchemas'
+import Joi from 'joi';
 export function FormContent({ register, isValid, errors }) {
-    const { pending } = useFormStatus();
-
+    const { pending } = useFormStatus()
 
     return (
         <>
             <Grid container spacing={2}>
                 {/* <ErrorMessage /> */}
-                {pending && "Gönderiliyor.."}
-                <Grid item xs={12}>
+                <Grid item xs={12} textAlign="center">
                     {/* {state && state?.message} */}
+                    {pending && "Gönderiliyor.."}
+
                     <Box display="flex" alignItems="center" justifyContent="center">
-                        <TextField
-                            name="email"
-                            label="Email"
-                            type="email"
-                            InputLabelProps={{ shrink: true }}
-                            autoComplete='email'
-                            fullWidth
-                            error={errors.email ? true : false}
-                            helperText={errors.email && errors.email.message}
-                            sx={{ width: "400px" }}
-                            {...register("email")}
-                        />
+
+                        <FormControl >
+                            <TextField
+                                name="email"
+                                label="Email"
+                                required
+                                InputLabelProps={{ shrink: true }}
+                                fullWidth
+                                autoComplete="off"
+                                autoFocus
+                                error={errors.email ? true : false}
+                                helperText={errors.email && errors.email.message}
+                                sx={{ width: "400px" }}
+                                {...register("email")}
+                            />
+                        </FormControl>
                     </Box>
                 </Grid>
                 <Grid item xs={12}>
@@ -60,75 +63,63 @@ export function FormContent({ register, isValid, errors }) {
             </Grid>
             <Grid item xs={12}>
                 <Box display="flex" alignItems="center" justifyContent="center">
-
                     <Button
                         type="submit"
                         form="my-form-id"
                         fullWidth
                         variant="contained"
-                        sx={{ mt: 3, mb: 2, width: "400px" }}
-                        disabled={!isValid}
+                        sx={{ mt: 3, mb: 1, width: "400px" }}
+                    /* disabled={!isValid} */
                     >
                         Giriş Yap
                     </Button>
                 </Box >
-
             </Grid>
+            <Grid item xs={12}>
+                <Box display="flex" alignItems="center" justifyContent="center">
+                    <Button
+                        type="button"
+                        fullWidth
+                        variant="contained"
+                        sx={{ mt: 1, mb: 1, width: "400px" }}
+                        onClick={() => console.log("Google Login")}>
 
+                        <GoogleIcon /> &nbsp;  Google ile Giriş Yap
+                    </Button>
+                </Box >
+            </Grid>
             <Grid item xs={12} >
-            <Box display="flex" alignItems="center" justifyContent="center">
-
-                <Box display="block" textAlign="right" width="400px">
-
-                <CustomLink target="/" label="Anasayfa" />
-                    <br />
-                    <CustomLink target="/signup" label="Hesabın yok mu? Kayıt Ol" />
-                    <br />
-                    <CustomLink target="/forgotpassword" label="Şifremi Unuttum" />
-                    <br />
-                    <CustomLink target="/" label="Anasayfa" />
+                <Box display="flex" alignItems="center" justifyContent="center">
+                    <Box display="block" textAlign="right" width="400px">
+                        <CustomLink target="/" label="Anasayfa" />
+                        <br />
+                        <CustomLink target="/signup" label="Hesabın yok mu? Kayıt Ol" />
+                        <br />
+                        <CustomLink target="/forgotpassword" label="Şifremi Unuttum" />
+                        <br />
+                        <CustomLink target="/" label="Anasayfa" />
+                    </Box >
                 </Box >
-                </Box >
-
             </Grid>
-           
         </>
     )
-
 }
 export default function SignInForm() {
 
-    const [state, formAction] = useFormState(authenticate, null);
-    const schema = Joi.object({
-        email: Joi.string().email({ tlds: { allow: false } }).required(),
-        password: Joi.string().min(6).required()
-    });
-    const mapErrors = (object) => {
-        const listErrorsKeys = Object.keys(object)
-        const listErrors = listErrorsKeys.map((key) => {
-            const errorMessage = object[key].message
+    const [state, formAction] = useFormState(authLogin, null);
 
-            return (<li>{errorMessage}</li>)
-
-        })
-
-        return listErrors
-
-    }
-
-    const { register, formState: { isValid, errors } } = useForm({
+    const { register,  formState: { isValid, errors } } = useForm({
         mode: "all",
-        resolver: joiResolver(schema)
-    });
+       // resolver: joiResolver(loginValidation),
+        resolver: joiResolver(loginValidation),
+    })
     console.log("errorss")
     console.log(errors)
-    console.log("isValid")
-    console.log(isValid)
 
     return (
         <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column" >
             <Box display="flex" alignItems="center" justifyContent="center" >
-                {(state && state?.status === "error") && <Alert sx={{ mb: 1,width:"400px" }} severity="error"> Server  Message: {state?.message}</Alert>}
+                {(state && state?.status === "error") && <Alert sx={{ mb: 1, width: "400px" }} severity="error"> Server  Message: {state?.message}</Alert>}
             </Box>
             <form action={formAction} id="my-form-id" name='my-form-id'  >
                 {/* Client Message: {errors && mapErrors(errors)} <br /> */}
@@ -136,7 +127,6 @@ export default function SignInForm() {
                     register={register}
                     isValid={isValid}
                     errors={errors} />
-
             </form>
         </Box>
 
