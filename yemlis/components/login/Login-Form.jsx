@@ -13,7 +13,6 @@ import { useFormState, useFormStatus } from 'react-dom'
 import CustomLink from '../inputs/CustomLink';
 import { authLogin } from '@/app/lib/actions';
 import { login as loginValidation } from '../../app/lib/validationSchemas'
-import Joi from 'joi';
 export function FormContent({ register, isValid, errors }) {
     const { pending } = useFormStatus()
 
@@ -93,25 +92,24 @@ export function FormContent({ register, isValid, errors }) {
                     <Box display="block" textAlign="right" width="400px">
                         <CustomLink target="/" label="Anasayfa" />
                         <br />
-                        <CustomLink target="/signup" label="Hesabın yok mu? Kayıt Ol" />
+                        <CustomLink target="/register" label="Hesabın yok mu? Kayıt Ol" />
                         <br />
                         <CustomLink target="/forgotpassword" label="Şifremi Unuttum" />
                         <br />
-                        <CustomLink target="/" label="Anasayfa" />
                     </Box >
                 </Box >
             </Grid>
         </>
     )
 }
-export default function SignInForm() {
+export default function LoginForm() {
 
     const [state, formAction] = useFormState(authLogin, null);
 
     const { register,  formState: { isValid, errors } } = useForm({
         mode: "all",
        // resolver: joiResolver(loginValidation),
-        resolver: joiResolver(loginValidation),
+        resolver: joiResolver(loginValidation/* ,{language:'de'} */)
     })
     console.log("errorss")
     console.log(errors)

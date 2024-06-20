@@ -1,0 +1,1 @@
+export const termsAndConditions = "Terms and Conditions gonna be ...."

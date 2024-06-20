@@ -40,7 +40,7 @@ const pages = [
 
 const signButtons = [
     { title: 'Giriş Yap', href: '/login' },
-    { title: 'Kayıt Ol', href: '/signup' }
+    { title: 'Kayıt Ol', href: '/register' }
 ]
 
 const settings = [
