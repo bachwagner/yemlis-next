@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useState } from 'react'
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useForm } from 'react-hook-form';
 import Button from '@mui/material/Button';
@@ -9,23 +9,23 @@ import TextField from '@mui/material/TextField';
 import Alert from '@mui/material/Alert';
 import FormControl from '@mui/material/FormControl';
 import GoogleIcon from '@mui/icons-material/Google';
-import { useFormState, useFormStatus } from 'react-dom'
+import  Typography  from '@mui/material/Typography';
 import CustomLink from '../inputs/CustomLink';
 import { authLogin } from '@/app/lib/actions';
 import { login as loginValidation } from '../../app/lib/validationSchemas'
-export function FormContent({ register, isValid, errors }) {
-    const { pending } = useFormStatus()
+import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
+
+export function FormContent({ register, isValid, setError, errors }) {
 
     return (
         <>
             <Grid container spacing={2}>
                 {/* <ErrorMessage /> */}
                 <Grid item xs={12} textAlign="center">
-                    {/* {state && state?.message} */}
-                    {pending && "Gönderiliyor.."}
 
                     <Box display="flex" alignItems="center" justifyContent="center">
-       
+
                         <FormControl >
                             <TextField
                                 name="email"
@@ -103,12 +103,38 @@ export function FormContent({ register, isValid, errors }) {
     )
 }
 export default function LoginForm() {
+    const [loading, setLoading] = useState(false)
+    const router = useRouter()
+    const onSubmit = async (data) => {
+        console.log("login form sent")
+        console.log(data)
+        setLoading(true)
+        try {
+            const res = await signIn(
+                'credentials', {
+                email:data.email,
+                password:data.password,
+                redirect: false
+            })
+            if (res.error) {
+                setError(
+                    "serverError",
+                    {
+                        type: "custom",
+                        message: "Geçersiz Kimlik Bilgileri"
+                    })
+                    return
+            }
+            router.replace('dashboard')
+        } catch (error) {
+            console.log("Error")
+            console.log(error)
+        }
 
-    const [state, formAction] = useFormState(authLogin, null);
-
-    const { register,  formState: { isValid, errors } } = useForm({
+    }
+    const { register, handleSubmit, setError, formState: { isValid, errors } } = useForm({
         mode: "all",
-       // resolver: joiResolver(loginValidation),
+        // resolver: joiResolver(loginValidation),
         resolver: joiResolver(loginValidation/* ,{language:'de'} */)
     })
     console.log("errorss")
@@ -116,15 +142,24 @@ export default function LoginForm() {
 
     return (
         <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column" >
-            <Box display="flex" alignItems="center" justifyContent="center" >
-                {(state && state?.status === "error") && <Alert sx={{ mb: 1, width: "400px" }} severity="error"> Server  Message: {state?.message}</Alert>}
-            </Box>
-            <form action={formAction} id="my-form-id" name='my-form-id'  >
+
+            {loading && "Gönderiliyor"}
+            {errors.serverError && <Typography
+                color="crimson"
+                fontWeight="bold"
+            >
+                {errors.serverError.message}
+            </Typography>}
+            <form
+                onSubmit={handleSubmit(onSubmit)}
+                id="my-form-id"
+                name='my-form-id'  >
                 {/* Client Message: {errors && mapErrors(errors)} <br /> */}
                 <FormContent
                     register={register}
                     isValid={isValid}
-                    errors={errors} />
+                    errors={errors}
+                    setError={setError} />
             </form>
         </Box>
 

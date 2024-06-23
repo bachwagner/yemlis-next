@@ -8,7 +8,6 @@ const label = { inputProps: { "aria-label": "Switch demo" } };
 
 export default function Home() {
     return (
-
         <Grid container>
             <Grid item xs={12} >
                 <Box
@@ -27,7 +26,6 @@ export default function Home() {
                         Yemlis ücretsiz besin, yemek, tarif, menü ve besin bilgileri  oluşturma, paylaşma ve keşfetme platformu
                     </Typography>
                     <CustomLink target="/" label="Anasayfa" />
-                  
 
                     {/*  <Button 
                                 href="/about"

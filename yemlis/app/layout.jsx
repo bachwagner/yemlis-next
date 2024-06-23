@@ -1,3 +1,5 @@
+import { AuthProvider } from './Providers';
+
 import { Inter, Nunito, Paytone_One } from 'next/font/google'
 import ThemeRegistry from '@/styles/ThemeRegistry'
 import Nav from '@/components/Nav'
@@ -19,7 +21,6 @@ export default function RootLayout({ children }) {
         <ThemeRegistry options={{ key: 'mui-theme' }}>
           <main>
             <Nav />
-
             <Box sx={{ flexGrow: 1 }}>
               <Container sx={{
                 display: "grid",
@@ -29,12 +30,12 @@ export default function RootLayout({ children }) {
                 // backgroundColor: "bisque",
               }} >
                 <section>
+                  <AuthProvider>
                     {children}
+                  </AuthProvider>
                 </section>
               </Container>
             </Box>
-
-
           </main>
         </ThemeRegistry>
       </body>
