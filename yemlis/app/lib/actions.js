@@ -1,93 +1,122 @@
 'use server'
 import { login, register } from '../lib/validationSchemas'
-//validation will be here
+import connectDB from './mongodb'
+import bcrypt from 'bcryptjs'
+import User from '@/models/user'
+import { getUserByEmail } from '@/app/lib/data/user'
 import { signIn } from '@/auth'
+import { DEFAULT_LOGIN_REDIRECT_URL } from '@/routes'
+import { isRedirectError } from 'next/dist/client/components/redirect'
+import { generateVerificationToken } from './tokens'
+import { sendVerificationEmail } from './mail'
 
 export async function authLogin(
-  _currentState,
-  formData
+  values
 ) {
-  console.log("formData")
-  console.log(formData)
-  try {
-    //await signIn('credentials', formData);
-    const email = formData.get("email")
-    const password = formData.get("password")
-    console.log(email)
-    console.log(password)
-    const validatedLoginParams = await login.validateAsync({ email, password });
-    console.log("login is ok")
-    console.log("validatedLoginParams")
-    console.log(validatedLoginParams)
+  const { email, password } = values
 
-    try {
-      await signIn('credentials', formData)
+  const validatedLoginParams = await login.validateAsync(
+    { email, password })
+  if (!validatedLoginParams) return { error: true, message: "validationError" }
 
-    } catch (signInError) {
+  const existingUser = await getUserByEmail(validatedLoginParams.email)
 
-      if (signInError /* instanceof AuthError */) {
-        console.log("signInError")
-        console.log(signInError)
-        switch (signInError.type) {
-          case 'CredentialsSignin':
-            console.log("Invalid credentials")
-            return 'Invalid credentials.';
-          default:
-            console.log("Invalid credentials")
-            return 'Something went wrong.';
-        }
-      }
-      throw signInError;
-    }
-  } catch (validationError) {
-    console.log("validationError")
-    console.log(validationError)
-    return "validationError"
+  if (!existingUser || !existingUser.email || !existingUser.password) return { error: true, message: "Email Kaydı Bulunmuyor" }
+
+  if (!existingUser.emailVerified) {
+    /* PASSWORD CHECK FOR UNauth*/
+    const passwordsMatch = await bcrypt.compare(
+      password, existingUser.password
+    )
+    console.log("passwordsMatch ev")
+    console.log(passwordsMatch)
+    if (!passwordsMatch) return { error: "true", message: "Geçersiz Kimlik Bilgileri" }
+    /* PASSWORD CHECK ENDS */
+    const verificationToken = await generateVerificationToken(existingUser.email)
+
+    console.log("sending verification email")
+    //await sendVerificationEmail(verificationToken.email,verificationToken.token)
+
+    return { success: true, message: "Email Doğrulanmamış, Yeni Doğrulama Emaili Gönderildi." }
+
   }
+  try {
+    const signInLogin = await signIn("credentials", {
+      email: validatedLoginParams.email,
+      password: validatedLoginParams.password,
+      redirectTo: DEFAULT_LOGIN_REDIRECT_URL
+    })
+
+  } catch (error) {
+    console.log("login error type")
+    console.log(error?.cause?.err?.code)
+    /* throw error; */
+
+    if (isRedirectError(error)) {
+      console.log("isRedirectError")
+      console.log(error)
+      throw error;
+    }
+    switch (error?.cause?.err?.code) {
+
+      case "credentials":
+        console.log("credentials error")
+
+        return { error: true, message: "Kimlik Bilgileri Geçersiz" }
+      case "CallbackRouteError":
+        console.log("helo")
+
+        return { error: true, message: "CallbackRouteErrorr" }
+      default:
+        return { error: true, message: "Giriş Hatası, daha sonra tekrar deneyin" }
+    }
+    throw error;
+
+  }
+
+  /*   function resolveAfter2Seconds(x) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(x);
+        }, 5000);
+      });
+    }
+    const x = await resolveAfter2Seconds(10);
+    console.log(x);
+  
+    return { status: "success", message: `Success ${x}` } */
+
 }
 export async function authRegister(
-  _currentState,
-  formData
+  values
 ) {
-  console.log("formData")
-  console.log(formData)
+  const { email, password, repeatpassword, acceptmails, acceptterms } = values
+  console.log("auth register")
+
+  const validatedRegisterParams = await register.validateAsync(
+    { email, password, repeatpassword, acceptmails, acceptterms })
+
+  if (!validatedRegisterParams) return { error: true, message: "validationError" }
+
   try {
-    //await signIn('credentials', formData);
-    const email = formData.get("email")
-    const password = formData.get("password")
-    const repeatpassword = formData.get("repeatpassword")
-    const acceptmails = formData.get("acceptmails")
-    const acceptterms = formData.get("acceptterms")
+    await connectDB()
+    const checkUserExists = await getUserByEmail(email)
+    if (checkUserExists) return { error: true, message: "Bu Email ile Kayıt Oluşturulmuş" }
+    const hashedPassword = await bcrypt.hash(password, 10)
+    const user = await User.create({ email, password: hashedPassword })
+    if (!user) return { error: false, message: "Registration Database Error" }
+    const verificationToken = await generateVerificationToken(email)
+    if (!verificationToken) return { error: true, message: "Doğrulama e-maili gönderilirken hata oluştu" }
+    //sent verification email
+    console.log("verification sending")
+    // sendVerificationEmail(verificationToken.email, verificationToken.token)
+    return { error: false, message: "Kayıt Başarılı, doğrulama e-maili gönderildi" }
 
-    const validatedRegisterParams = await register.validateAsync(
-      { email, password, repeatpassword, acceptmails, acceptterms });
-   
-      console.log("register is ok")
-    console.log("validatedRegisterParams")
-    console.log(validatedRegisterParams)
-
-    try {
-      await signIn('credentials', formData)
-
-    } catch (signInError) {
-
-      if (signInError /* instanceof AuthError */) {
-        console.log("signUpError")
-        console.log(signInError)
-        switch (signInError.type) {
-          case 'CredentialsSignUp':
-            console.log("Invalid credentials")
-            return 'Invalid credentials.';
-          default:
-            console.log("Invalid credentials")
-            return 'Something went wrong.';
-        }
-      }
-      throw signInError;
-    }
-  } catch (validationError) {
-    console.log("validationError")
-    console.log(validationError)
-    return "validationError"
+  } catch (error) {
+    console.log("error")
+    console.log(error)
+    return { error: true, message: "Kayıt Hatası, daha sonra tekrar deneyiniz" }
   }
+
+
 }

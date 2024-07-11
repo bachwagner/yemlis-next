@@ -13,8 +13,8 @@ import Modal from '@mui/material/Modal';
 import FormControl from '@mui/material/FormControl';
 import GoogleIcon from '@mui/icons-material/Google';
 import { useFormState, useFormStatus } from 'react-dom'
-import CustomLink from '../inputs/CustomLink';
-import { register as registerValidation } from '../../app/lib/validationSchemas'
+import CustomLink from '../../inputs/CustomLink';
+import { register as registerValidation } from '../../../app/lib/validationSchemas'
 import { Link } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import FormHelperText from '@mui/material/FormHelperText';
@@ -197,7 +197,7 @@ export function FormContent({ register, isValid, control, setValue, errors }) {
                     <Box display="block" textAlign="right" width="400px">
                         <CustomLink target="/" label="Anasayfa" />
                         <br />
-                        <CustomLink target="/login" label="Zaten Hesabın Var mı? Giriş Yap" />
+                        <CustomLink target="/auth/login" label="Zaten Hesabın Var mı? Giriş Yap" />
                         <br />
                     </Box >
                 </Box >

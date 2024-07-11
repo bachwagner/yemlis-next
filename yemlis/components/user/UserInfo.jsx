@@ -6,6 +6,8 @@ import { useSession } from 'next-auth/react'
 
 function UserInfo() {
   const { data: session } = useSession()
+  console.log("session")
+  console.log(session)
   return (
     <Box
       display="flex"
@@ -14,6 +16,8 @@ function UserInfo() {
       alignItems="center"
     >
       <div>{session?.user?.email}</div>
+
+      <div>{session?.user?.isEmailVerified ? <>Email Aktif</> : <>Email Aktif Değil</>}</div>
 
       <Button
         onClick={() => signOut()}

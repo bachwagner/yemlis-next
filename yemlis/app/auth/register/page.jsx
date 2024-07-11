@@ -1,16 +1,16 @@
-import RegisterForm from "@/components/register/Register-Form";
-import RegisterFormAPI from "@/components/register/Register-Form-API";
+import RegisterForm from "@/components/auth/register/Register-Form";
+import RegisterFormAPI from "@/components/auth/register/Register-Form-API";
 import { Box, Grid, Typography } from "@mui/material";
 import FoodBankIcon from '@mui/icons-material/FoodBank';
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import { authOptions } from "../api/auth/[...nextauth]/route";
+//import { authOptions } from "../api/auth/[...nextauth]/route";
 
 export default async function RegisterPage() {
-    const session = await getServerSession(authOptions)
+   // const session = await getServerSession(authOptions)
     console.log("session")
-    console.log(session)
-    if (session) redirect('/dashboard')
+   // console.log(session)
+  //  if (session) redirect('/dashboard')
     return (
         <main >
 
@@ -26,7 +26,7 @@ export default async function RegisterPage() {
                 </Grid>
 
                 <Grid item sx={12}>
-                    <RegisterFormAPI />
+                    <RegisterForm />
 
                 </Grid>
 

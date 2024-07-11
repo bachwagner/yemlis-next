@@ -27,11 +27,11 @@ import Tooltip from '@mui/material/Tooltip';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import {
+/* import {
     signIn, signOut, useSession,
     getProviders
 } from 'next-auth/react'
-
+ */
 const pages = [
     { title: 'Besin Ekle', href: '/addFood' },
     { title: 'Besin Ara', href: '/searchFood' },
@@ -39,8 +39,8 @@ const pages = [
     { title: 'Rehber', href: '/guide' }]
 
 const signButtons = [
-    { title: 'Giriş Yap', href: '/login' },
-    { title: 'Kayıt Ol', href: '/register' }
+    { title: 'Giriş Yap', href: '/auth/login' },
+    { title: 'Kayıt Ol', href: '/auth/register' }
 ]
 
 const settings = [

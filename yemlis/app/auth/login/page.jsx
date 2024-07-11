@@ -1,14 +1,15 @@
-import LoginFormAPI from "@/components/login/Login-Form-API";
+import LoginFormAPI from "@/components/auth/login/Login-Form-API";
+import LoginForm from "@/components/auth/login/Login-Form"
 import { Box, Grid, Typography } from "@mui/material";
 import FoodBankIcon from '@mui/icons-material/FoodBank';
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import { authOptions } from "../api/auth/[...nextauth]/route";
+//import { authOptions } from "../api/auth/[...nextauth]/route";
 export default async function LoginPage() {
-    const session = await getServerSession(authOptions)
-    console.log("session")
-    console.log(session)
-    if (session) redirect('/dashboard')
+    //   const session = await getServerSession(authOptions)
+    //   console.log("session")
+    //    console.log(session)
+    //   if (session) redirect('/dashboard')
     return (
         <main >
             <Grid container direction="column">
@@ -23,7 +24,7 @@ export default async function LoginPage() {
                 </Grid>
 
                 <Grid item sx={12}>
-                    <LoginFormAPI />
+                    <LoginForm />
                 </Grid>
             </Grid>
         </main >

@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@auth/mongodb-adapter": "^3.4.1",
     "@emotion/cache": "^11.11.0",
     "@fontsource/paytone-one": "^5.0.20",
     "@hookform/resolvers": "^3.6.0",
@@ -17,12 +18,17 @@
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "joi": "^17.13.1",
-    "mongodb": "^6.7.0",
+    "mongodb": "^6.8.0",
     "mongoose": "^8.4.1",
     "next": "14.2.3",
-    "next-auth": "^4.24.7",
+    "next-auth": "^5.0.0-beta.19",
+    "nodemailer": "^6.9.14",
     "react": "^18",
     "react-dom": "^18",
-    "react-hook-form": "^7.51.5"
+    "react-hook-form": "^7.51.5",
+    "resend": "^3.4.0"
+  },
+  "devDependencies": {
+    "typescript": "5.5.3"
   }
 }

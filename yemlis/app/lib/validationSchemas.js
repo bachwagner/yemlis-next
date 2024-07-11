@@ -8,6 +8,11 @@ export const login = Joi.object({
         'string.empty': 'Şifre alanı gerekli',
     })
 })
+export const email = Joi.object({
+    email: Joi.string().email({ tlds: { allow: false } }).messages({
+        'string.email': 'Geçersiz  email adresi',
+    })
+})
 export const register = Joi.object({
     email: Joi.string().email({ tlds: { allow: false } }).messages({
         'string.email': 'Geçersiz  email adresi',

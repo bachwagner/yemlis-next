@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useTransition, useEffect, useRef } from 'react'
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useForm, Controller } from 'react-hook-form';
 import Button from '@mui/material/Button';
@@ -10,16 +10,18 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import TextField from '@mui/material/TextField';
 import CheckBox from '@mui/material/Checkbox'
 import Modal from '@mui/material/Modal';
+import Alert from '@mui/material/Alert';
 import FormControl from '@mui/material/FormControl';
 import GoogleIcon from '@mui/icons-material/Google';
 import { useFormState, useFormStatus } from 'react-dom'
-import CustomLink from '../inputs/CustomLink';
+import CustomLink from '../../inputs/CustomLink';
 import { authRegister } from '@/app/lib/actions';
-import { register as registerValidation } from '../../app/lib/validationSchemas'
+import { register as registerValidation } from '../../../app/lib/validationSchemas'
 import { Link } from '@mui/material';
 import FormHelperText from '@mui/material/FormHelperText';
+import Joi from 'joi';
 
-export function FormContent({ register, isValid, control, setValue, errors }) {
+export function FormContent({ register, isPending, control, setValue, errors }) {
     const { pending } = useFormStatus()
     const [open, setOpen] = useState(false)
     const handleOpen = () => setOpen(true)
@@ -146,11 +148,11 @@ export function FormContent({ register, isValid, control, setValue, errors }) {
                                     name="acceptmails"
                                     control={control}
                                     //  rules={{ required: true }}
-                                    render={({ field:props }) => (
+                                    render={({ field: props }) => (
                                         <CheckBox
-                                        {...props}
-                                        checked={props.value}
-                                        onChange={(e) => props.onChange(e.target.checked)}
+                                            {...props}
+                                            checked={props.value}
+                                            onChange={(e) => props.onChange(e.target.checked)}
                                         />
                                     )}
                                 />}
@@ -167,8 +169,10 @@ export function FormContent({ register, isValid, control, setValue, errors }) {
                         form="my-form-id"
                         fullWidth
                         variant="contained"
+                        disabled={isPending}
                         sx={{ mt: 3, mb: 1, width: "400px" }}>
-                        Kayıt Ol
+                        {!isPending ? "Kayıt Ol" : "Gönderiliyor"}
+
                     </Button>
                 </Box >
             </Grid>
@@ -189,7 +193,7 @@ export function FormContent({ register, isValid, control, setValue, errors }) {
                     <Box display="block" textAlign="right" width="400px">
                         <CustomLink target="/" label="Anasayfa" />
                         <br />
-                        <CustomLink target="/login" label="Zaten Hesabın Var mı? Giriş Yap" />
+                        <CustomLink target="/auth/login" label="Zaten Hesabın Var mı? Giriş Yap" />
                         <br />
                     </Box >
                 </Box >
@@ -214,7 +218,23 @@ export function FormContent({ register, isValid, control, setValue, errors }) {
     )
 }
 export default function RegisterForm() {
-    const [state, formAction] = useFormState(authRegister, null);
+    // const [state, formAction] = useFormState(authRegister, null);
+    const [isPending, startTransition] = useTransition()
+    const [serverStatus, setServerStatus] = useState(false)
+
+    const dummyJoiSchema = Joi.object({
+        email: Joi.string().messages({
+            'string.email': 'Geçersiz  email adresi',
+        }),
+        password: Joi.string().min(6).required().messages({
+            'string.min': 'Şifre en az 6 karakter içermeli',
+            'string.empty': 'Şifre alanı gerekli',
+        }),
+        repeatpassword: Joi.string().valid(Joi.ref('password')).required().messages({ 'any.only': 'Şifreler Eşleşmeli' }),
+        acceptmails: Joi.boolean(),
+        acceptterms: Joi.boolean().invalid(false)
+    })
+
     const { register, control, handleSubmit, setValue, formState: { isValid, errors } } = useForm({
         mode: "all",
         defaultValues: { acceptmails: true, acceptterms: false },
@@ -228,16 +248,36 @@ export default function RegisterForm() {
     return (
         <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column" >
             <Box display="flex" alignItems="center" justifyContent="center" >
-                {/*                 {(state && state?.status === "error") && <Alert sx={{ mb: 1, width: "400px" }} severity="error"> Server  Message: {state?.message}</Alert>}
- */}            </Box>
+            {serverStatus.error && <Alert sx={{ mb: 1, width: "400px" }} severity="error"> Server Mesajı: {serverStatus?.message}</Alert>}            </Box>
             <form
                 ref={formRef}
-                action={formAction}
+                action={authRegister}
                 onSubmit={(evt) => {
                     evt.preventDefault();
-                    handleSubmit(() => {
-                        formAction(new FormData(formRef.current));
+                    handleSubmit((values) => {
+                        try {
+                            startTransition(() => {
+                                authRegister(values).then((data) => {
+                                    console.log("data recevied", data.message)
+                                    setServerStatus(data)
+                                    console.log(data)
+                                    console.log("data.error")
+                                    console.log(data.error)
+                                }).catch((error) => {
+                                    console.log("promise error")
+                                    console.log(error)
+                                    setServerStatus({ error: true, message: error })
+                                })
+                            })
+                            console.log("success handle submit")
+                        } catch (e) {
+                            setIsLoading(true)
+                            console.log("error handle submit")
+                            setIsLoading(false)
+                            // handle your error
+                        }
                     })(evt);
+
                 }}
                 id="my-form-id"
                 name='my-form-id'  >

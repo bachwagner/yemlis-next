@@ -1,4 +1,4 @@
-import { AuthProvider } from './Providers';
+//import { AuthProvider } from './Providers';
 
 import { Inter, Nunito, Paytone_One } from 'next/font/google'
 import ThemeRegistry from '@/styles/ThemeRegistry'
@@ -13,7 +13,7 @@ const paytone = Paytone_One({ weight: "400", subsets: ['latin'] })
 export const metadata = {
   title: 'Yemlis',
   description: 'Besin ve Menü Paylaşım Platformu',
-}
+} 
 export default function RootLayout({ children }) {
   return (
     <html lang="tr">
@@ -30,9 +30,9 @@ export default function RootLayout({ children }) {
                 // backgroundColor: "bisque",
               }} >
                 <section>
-                  <AuthProvider>
+                 {/*  <AuthProvider> */}
                     {children}
-                  </AuthProvider>
+                {/*   </AuthProvider> */}
                 </section>
               </Container>
             </Box>

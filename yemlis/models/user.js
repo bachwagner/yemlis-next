@@ -1,18 +1,47 @@
-import mongoose, {Schema,models} from "mongoose"
+import mongoose, { Schema, models } from "mongoose"
+const UserRoles = ["ADMIN", "USER"]
 
 const userSchema = new Schema({
-    email:{
-        type:String,
-        required:true
+    email: {
+        type: String,
+        required: true
     },
-    password:{
-        type:String,
-        required:true
-    }},{
-        timestamps:true
-    }
+    name: {
+        type: String,
+        required: false
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    emailVerified: {
+        type: Date,
+        required: false
+    },
+    image: {
+        type: String,
+        required: false
+    },
+    role: {
+        type: String,  //TODO userRole
+        required: false,
+        default: "USER",
+        enum: UserRoles,
+    },
+   /*  accounts: {
+        type: [String], //TODO [Accounts]
+        required: false
+    } */
+    accounts: {
+        type: [{ type: Schema.Types.ObjectId, ref: 'Account' }], //TODO [Accounts]
+        required: false
+    } 
+
+}, {
+    timestamps: true
+}
 
 )
 
-const User = models.User || mongoose.model("User", userSchema)
+const User = models?.User || mongoose.model("User", userSchema)
 export default User
