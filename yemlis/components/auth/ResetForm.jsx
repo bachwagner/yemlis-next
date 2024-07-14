@@ -11,10 +11,10 @@ import Alert from '@mui/material/Alert';
 import FormControl from '@mui/material/FormControl';
 import CustomLink from '@/components/inputs/CustomLink';
 import { Typography } from '@mui/material';
-import { authLogin } from '@/app/lib/actions';
+import { reset } from '@/app/lib/reset';
 import Joi from 'joi';
-import { email as emailValidation } from '@/app/lib/validationSchemas'
-
+import { justEmail as emailValidation } from '@/app/lib/validationSchemas'
+ 
 export function FormContent({ register, isPending, errors }) {
     const onClick = (provider) => {
 
@@ -61,11 +61,11 @@ export function FormContent({ register, isPending, errors }) {
                         disabled={isPending}
                         sx={{ mt: 3, mb: 1, width: "400px" }}
                     >
-                       Şifre Sıfırlama Emaili Gönder
+                        Şifre Sıfırlama Emaili Gönder
                     </Button>
                 </Box >
             </Grid>
-        
+
             <Grid item xs={12} >
                 <Box display="flex" alignItems="center" justifyContent="center">
                     <Box display="block" textAlign="right" width="400px">
@@ -77,7 +77,7 @@ export function FormContent({ register, isPending, errors }) {
                 </Box >
             </Grid>
         </>
-    ) 
+    )
 }
 export default function ResetForm() {
     // const [state, formAction] = useFormState(authLogin, null)
@@ -97,10 +97,6 @@ export default function ResetForm() {
     useEffect(() => {
 
     })
-    console.log("errorss")
-    console.log(errors)
-    console.log("serverStatus")
-    console.log(serverStatus)
 
     const formRef = useRef(null);
 
@@ -114,7 +110,7 @@ export default function ResetForm() {
             </Box>
             <form
                 ref={formRef}
-                action={authLogin}
+                action={reset}
                 id="my-form-id"
                 name='my-form-id'
                 onSubmit={(evt) => {
@@ -123,8 +119,8 @@ export default function ResetForm() {
                         console.log("values")
                         console.log(values)
                         try {
-                          /*   startTransition(() => {
-                                authLogin(values).then((data) => {
+                            startTransition(() => {
+                                reset(values).then((data) => {
                                     console.log("data recevied", data?.message)
                                     setServerStatus(data)
                                     console.log("data")
@@ -139,7 +135,7 @@ export default function ResetForm() {
                                     setServerStatus({ error: true, message: "Beklenmedik Bir Hata Oluştu" })
                                 })
 
-                            }) */
+                            })
 
                             console.log("success handle submit")
 

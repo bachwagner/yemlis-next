@@ -1,14 +1,14 @@
 'use server'
-import { login, register } from '../lib/validationSchemas'
-import connectDB from './mongodb'
+import { login, register } from '../validationSchemas'
+import connectDB from '../mongodb'
 import bcrypt from 'bcryptjs'
 import User from '@/models/user'
 import { getUserByEmail } from '@/app/lib/data/user'
 import { signIn } from '@/auth'
 import { DEFAULT_LOGIN_REDIRECT_URL } from '@/routes'
 import { isRedirectError } from 'next/dist/client/components/redirect'
-import { generateVerificationToken } from './tokens'
-import { sendVerificationEmail } from './mail'
+import { generateVerificationToken } from '../tokens'
+import { sendVerificationEmail } from '../mail'
 
 export async function authLogin(
   values
@@ -35,7 +35,7 @@ export async function authLogin(
     const verificationToken = await generateVerificationToken(existingUser.email)
 
     console.log("sending verification email")
-    //await sendVerificationEmail(verificationToken.email,verificationToken.token)
+    await sendVerificationEmail(verificationToken.email,verificationToken.token)
 
     return { success: true, message: "Email Doğrulanmamış, Yeni Doğrulama Emaili Gönderildi." }
 

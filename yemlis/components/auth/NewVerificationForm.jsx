@@ -4,7 +4,7 @@ import { useSearchParams } from 'next/navigation'
 import { Box, Typography } from "@mui/material"
 import { CircularProgress } from "@mui/material"
 import { newVerification } from "@/app/lib/newVerification"
-import { Alert } from "@mui/material"
+import { Button, Alert } from "@mui/material"
 
 export const NewVerificationForm = () => {
     const searchParams = useSearchParams()
@@ -28,18 +28,23 @@ export const NewVerificationForm = () => {
 
     useEffect(() => {
         onSubmit()
-    }, [onSubmit]) 
+    }, [onSubmit])
     return (
         <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column">
             <Typography variant="h5" p={1}>
-                Email Doğrulanıyor
+                Email Doğrulama
             </Typography>
             {
-            !status?<CircularProgress p={1} />
-            :<Alert
-                severity={status?.error ? "error" : status?.success ? "success" : "info"}>
-                {status?.message}
-            </Alert>}
+                !status ? <CircularProgress p={1} />
+                    : <Alert
+                        severity={status?.error ? "error" : status?.success ? "success" : "info"}>
+                        {status?.message}
+                    </Alert>}
+            {status?.error && <>
+                <Typography mt={2}>Tekrar Giriş Yaparak Doğrulama Kodu Alabilirsiniz</Typography>
+                <Button variant='outlined' href='/auth/login' sx={{ mt: 2 }}>Giriş Yap</Button>
+                </>}
+
         </Box>
     )
 

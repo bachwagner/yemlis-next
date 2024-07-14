@@ -1,20 +1,34 @@
-import { auth, signOut } from "@/auth"
+"use client"
 import { Button } from "@mui/material"
-const SettingsPage = async () => {
-    const session = await auth()
+import { useSession, signOut, getSession } from "next-auth/react"
+import { logout } from "@/app/lib/actions/logout"
+
+const SettingsPage = () => {
+    // const session = await auth()   // for server comp
+    const { data: session, status } = useSession({ required: true })
+
+    console.log("status")
+    console.log(status)
+    console.log(session)
     console.log("session")
     console.log(session)
+
+    const onClick = () => {
+        console.log("signOut")
+
+        signOut()
+        // logout()
+    }
     return (
         <div>
-            {JSON.stringify(session)}
-            <form action={async()=>{
-                "use server"
-                await signOut({redirectTo:"/auth/login"})
-            }}>
-                <Button type="submit" >
-                Çıkış
+            {status === "loading" ? <>Loading...</> : <>
+                {/*{JSON.stringify(session)} */}
+                user: {session?.user?.email}
+                <Button type="submit" onClick={onClick}>
+                    Çıkış
                 </Button>
-            </form>
+            </>}
+
         </div>
     )
 }

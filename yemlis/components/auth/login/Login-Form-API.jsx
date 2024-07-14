@@ -11,7 +11,7 @@ import FormControl from '@mui/material/FormControl';
 import GoogleIcon from '@mui/icons-material/Google';
 import  Typography  from '@mui/material/Typography';
 import CustomLink from '../../inputs/CustomLink';
-import { authLogin } from '@/app/lib/actions';
+import { authLogin } from '@/app/lib/actions/actions';
 import { login as loginValidation } from '../../../app/lib/validationSchemas'
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';

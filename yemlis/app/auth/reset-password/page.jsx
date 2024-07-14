@@ -4,7 +4,7 @@ const ResetPage = () => {
 
     return (
         <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-            <Typography variant="h5" mb={2}>Reset Page</Typography>
+            <Typography variant="h5" mb={2}>Şifre Sıfırlama</Typography>
             <ResetForm/>
         </Box>
     )

@@ -28,6 +28,9 @@ const theme = createTheme({
         primary: {
             main: "#353739",
         },
+        secondary:{
+            main:"#FFFFFF"
+        }
     },  typography: {
         fontFamily:  nunito.style.fontFamily, 
     }, 

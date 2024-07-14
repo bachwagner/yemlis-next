@@ -8,10 +8,20 @@ export const login = Joi.object({
         'string.empty': 'Şifre alanı gerekli',
     })
 })
-export const email = Joi.object({
+export const justEmail = Joi.object({
     email: Joi.string().email({ tlds: { allow: false } }).messages({
         'string.email': 'Geçersiz  email adresi',
     })
+})
+export const newPassword = Joi.object({
+    password: Joi.string().min(6).required().messages({
+        'string.min': 'Şifre en az 6 karakter içermeli',
+        'string.empty': 'Şifre alanı gerekli',
+    }),
+    repeatpassword: Joi.string().valid(Joi.ref('password')).required().messages({
+        'any.only': 'Şifreler Eşleşmeli'
+    }),
+
 })
 export const register = Joi.object({
     email: Joi.string().email({ tlds: { allow: false } }).messages({

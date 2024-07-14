@@ -15,7 +15,7 @@ import FormControl from '@mui/material/FormControl';
 import GoogleIcon from '@mui/icons-material/Google';
 import { useFormState, useFormStatus } from 'react-dom'
 import CustomLink from '../../inputs/CustomLink';
-import { authRegister } from '@/app/lib/actions';
+import { authRegister } from '@/app/lib/actions/actions';
 import { register as registerValidation } from '../../../app/lib/validationSchemas'
 import { Link } from '@mui/material';
 import FormHelperText from '@mui/material/FormHelperText';
