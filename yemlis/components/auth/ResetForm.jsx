@@ -11,7 +11,7 @@ import Alert from '@mui/material/Alert';
 import FormControl from '@mui/material/FormControl';
 import CustomLink from '@/components/inputs/CustomLink';
 import { Typography } from '@mui/material';
-import { reset } from '@/app/lib/reset';
+import { reset } from '@/app/lib/actions/reset';
 import Joi from 'joi';
 import { justEmail as emailValidation } from '@/app/lib/validationSchemas'
  

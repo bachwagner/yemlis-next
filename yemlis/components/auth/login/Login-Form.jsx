@@ -19,10 +19,10 @@ import Joi from 'joi';
 import { login, login as loginValidation } from '../../../app/lib/validationSchemas'
 import { signIn } from 'next-auth/react';
 import { DEFAULT_LOGIN_REDIRECT_URL } from '@/routes';
-export function FormContent({ register, isPending, errors }) {
+export function FormContent({ register, isPending, callbackUrl, isRedirecting, errors }) {
     const onClick = (provider) => {
         signIn(provider, {
-            callbackUrl: DEFAULT_LOGIN_REDIRECT_URL,
+            callbackUrl: callbackUrl || DEFAULT_LOGIN_REDIRECT_URL,
 
         })
     }
@@ -75,7 +75,7 @@ export function FormContent({ register, isPending, errors }) {
                     </Box>
                 </Grid>
             </Grid>
-          
+
             <Grid item xs={12}>
                 <Box display="flex" alignItems="center" justifyContent="center">
                     <Button
@@ -83,11 +83,14 @@ export function FormContent({ register, isPending, errors }) {
                         form="my-form-id"
                         fullWidth
                         variant="contained"
-                        disabled={isPending}
+                        disabled={isPending || isRedirecting}
                         sx={{ mt: 3, mb: 1, width: "400px" }}
                     /* disabled={!isValid} */
                     >
-                        {!isPending ? "Giriş Yap" : "Gönderiliyor"}
+                        {
+                            isPending ? "Gönderiliyor"
+                                : isRedirecting ? "Giriş Yapılıyor"
+                                    : "Giriş Yap"}
                     </Button>
                 </Box >
             </Grid>
@@ -123,10 +126,12 @@ export default function LoginForm() {
     // const [state, formAction] = useFormState(authLogin, null)
     const [isPending, startTransition] = useTransition()
     const [serverStatus, setServerStatus] = useState(false)
+
     const searchParams = useSearchParams()
     const urlError = searchParams.get("error") === "OAuthAccountNotLinked"
-    console.log("urlError")
-    console.log(urlError)
+    const callbackUrl = searchParams.get("callbackUrl")
+    console.log("callbackUrl")
+    console.log(callbackUrl)
     const dummyJoiSchema = Joi.object({
         email: Joi.string().messages({
             'string.email': 'Geçersiz  email adresi',
@@ -141,16 +146,29 @@ export default function LoginForm() {
         // resolver: joiResolver(loginValidation),
         resolver: joiResolver(loginValidation/* ,{language:'de'} */)
     })
-    useEffect(()=>{
-        if (urlError) setServerStatus({error:true,message:"Bu email başka ile başla sağlayıcıdan kayıt oluşturulmuş"})
+    useEffect(() => {
+        if (urlError) setServerStatus({
+            error: true,
+            message: "Bu email başka ile başla sağlayıcıdan kayıt oluşturulmuş"
+        })
 
-    },[urlError])
+    }, [urlError])
     console.log("errorss")
     console.log(errors)
     console.log("serverStatus")
     console.log(serverStatus)
 
-    const formRef = useRef(null);
+    useEffect(() => {
+        console.log("useeffect")
+
+        if (serverStatus.success) {
+            console.log("serverStatus.success")
+            console.log(serverStatus.success)
+            window.location.replace(serverStatus?.callbackUrl || "/")
+        }
+    }, [serverStatus.success])
+
+    const formRef = useRef(null)
 
     return (
         <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column" >
@@ -158,7 +176,7 @@ export default function LoginForm() {
                 {serverStatus?.error && <Alert sx={{ mb: 1, width: "400px" }} severity="error"> Server Mesajı: {serverStatus?.message}</Alert>}
             </Box>
             <Box display="flex" alignItems="center" justifyContent="center" >
-                {serverStatus?.success && <Alert sx={{ mb: 1, width: "400px" }} severity="success"> Server Mesajı: {serverStatus?.message}</Alert>}
+                {serverStatus?.success && !serverStatus?.isRedirecting && <Alert sx={{ mb: 1, width: "400px" }} severity="success"> Server Mesajı: {serverStatus?.message}</Alert>}
             </Box>
             <form
                 ref={formRef}
@@ -172,7 +190,7 @@ export default function LoginForm() {
                         console.log(values)
                         try {
                             startTransition(() => {
-                                authLogin(values).then((data) => {
+                                authLogin(values, callbackUrl).then((data) => {
                                     console.log("data recevied", data?.message)
                                     setServerStatus(data)
                                     console.log("data")
@@ -209,9 +227,11 @@ export default function LoginForm() {
                     isValid={isValid}
                     errors={errors}
                     isPending={isPending}
+                    isRedirecting={serverStatus?.isRedirecting}
+                    callbackUrl={callbackUrl}
                 />
             </form>
-        </Box>
+        </Box >
 
     )
 }

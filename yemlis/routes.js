@@ -16,4 +16,4 @@ export const authRoutes = [
 
 export const apiAuthPrefix = "/api/auth"
 
-export const DEFAULT_LOGIN_REDIRECT_URL = "/settings"
+export const DEFAULT_LOGIN_REDIRECT_URL = "/"

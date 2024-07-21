@@ -1,7 +1,8 @@
- import mongoose, { Schema, models } from "mongoose"
+import mongoose, { Schema, models } from "mongoose"
 const accountSchema = new Schema({
     userId: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: 'User',
         required: true
     },
     type: {
@@ -35,11 +36,7 @@ const accountSchema = new Schema({
     scope: {
         type: String,
         required: false
-    },
-    scope: {
-        type: String,
-        required: false
-    },
+    },   
     id_token: {
         type: String,
         required: false
@@ -52,5 +49,5 @@ const accountSchema = new Schema({
 }
 )
 
-const Account = models?.User || mongoose.model("User", accountSchema)
+const Account = models?.Account || mongoose.model("Account", accountSchema)
 export default Account 

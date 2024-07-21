@@ -1,32 +1,26 @@
 'use client'
 import React, { useState, useEffect } from 'react';
-import { Link } from '@mui/material';
-import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import InputBase from '@mui/material/InputBase';
-import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import MailIcon from '@mui/icons-material/Mail';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import MoreIcon from '@mui/icons-material/MoreVert';
 import NextLink from 'next/link'
 import Image from 'next/image'
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import FoodBankIcon from '@mui/icons-material/FoodBank';
-import Tooltip from '@mui/material/Tooltip';
-import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import { usePathname } from 'next/navigation';
+import { useCurrentUser } from '@/hooks/use-current-user';
+import { getSession, signOut, useSession } from 'next-auth/react';
+import { LogoutButton } from './auth/LogoutButton';
+import { useCurrentSession } from '@/hooks/use-current-session';
 /* import {
     signIn, signOut, useSession,
     getProviders
@@ -47,20 +41,20 @@ const settings = [
     { title: 'Profil', href: '/profile' },
     { title: 'Hesap', href: '/account' },
     { title: 'Kaydedilenler', href: '/saved' },
-    { title: 'Atölye', href: '/workshop' }];
+    { title: 'Atölye', href: '/workshop' },
+    { title: 'Ayarlar', href: '/settings' },
 
-const AvatarImage = () => {
+];
+
+const AvatarImage = (imageUrl) => {
     return (<Image
-        src="/assets/images/avatar.jpg"
-        alt="Yemlis Logo"
+        src={imageUrl && "/images/avatar.png"}
+        alt="Avatar Resmi"
         width={40}
         height={40}
-
     />)
 }
-const logout = () => {
 
-}
 const LanguageSelector = ({ language, handleChange, isDark }) => {
     return (
         <FormControl sx={{ minWidth: 80, my: !isDark ? 2 : 0, display: 'block' }}>
@@ -93,20 +87,16 @@ const LanguageSelector = ({ language, handleChange, isDark }) => {
     )
 }
 export default function Nav() {
-    const [anchorElNav, setAnchorElNav] = useState(null);
-    const [anchorElUser, setAnchorElUser] = useState(null);
-    const [language, setLanguage] = useState();
+    const [anchorElNav, setAnchorElNav] = useState(null)
+    const [anchorElUser, setAnchorElUser] = useState(null)
+    const [language, setLanguage] = useState()
+    const pathname = usePathname()
 
-    /* useEffect(() => {
-        const setProviders = async () => {
-            const response = await getProviders()
+    const { data: session, status } = useSession()
 
-            setProviders(response)
-        }
-    },[]) */
+    const user = session?.user
 
     const isSignIn = false
-
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -123,9 +113,7 @@ export default function Nav() {
         setAnchorElUser(null);
     };
 
-
     const handleChange = (event) => {
-
         setLanguage(event.target.value);
     };
     return (
@@ -162,6 +150,7 @@ export default function Nav() {
                             >
                                 <MenuIcon />
                             </IconButton>
+
                             <Menu
                                 id="menu-appbar"
                                 anchorEl={anchorElNav}
@@ -209,7 +198,9 @@ export default function Nav() {
                         </Box>
                         {/* __Mobile__  */}
 
-                        <FoodBankIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+                        <FoodBankIcon
+                            sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+
                         <Typography
                             variant="h5"
                             noWrap
@@ -228,7 +219,11 @@ export default function Nav() {
                         >
                             Yemlis
                         </Typography>
-                        <Box sx={{ flexDirection: "row-reverse", flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                        <Box sx={{
+                            flexDirection: "row-reverse",
+                            flexGrow: 1,
+                            display: { xs: 'none', md: 'flex' }
+                        }}>{user?.email}
                             <LanguageSelector language={language} onChange={handleChange} />
 
                             {!isSignIn && signButtons.map((page) => (
@@ -236,22 +231,33 @@ export default function Nav() {
                                     key={page.title}
                                     href={page.href}
                                     LinkComponent={NextLink}
-                                    variant="body2"
-                                    onClick={handleCloseNavMenu}
+                                    variant="outlined"
                                     sx={{ my: 2, color: 'white', display: 'block' }}
                                 >
                                     {page.title}
                                 </Button>
                             ))}
-
+                            <Button sx={{ color: "white" }} onClick={() => update()}>Update</Button>
                             {pages.map((page) => (
                                 <Button
                                     href={page.href}
                                     LinkComponent={NextLink}
-                                    variant="body2"
+                                    variant="outlined"
                                     key={page.title}
-                                    onClick={handleCloseNavMenu}
-                                    sx={{ my: 2, color: 'white', display: 'block' }}
+                                    sx={
+                                        {
+                                            my: 2,
+                                            color: 'white',
+                                            display: 'block',
+                                            backgroundColor: pathname !== page.href ? "inherit" : "#727375",
+                                            borderColor: pathname !== page.href ? "transparent" : "white",
+                                            ":hover":
+                                            {
+                                                "backgroundColor": pathname !== page.href ? "inherit" : "#727375",
+                                                "borderColor": pathname !== page.href ? "transparent" : "white"
+                                            }
+                                        }
+                                    }
                                 >
                                     {page.title}
                                 </Button>
@@ -262,7 +268,7 @@ export default function Nav() {
                         <Box sx={{ flexGrow: 0 }}>
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }} >
                                 <Avatar alt="profil fotoğrafı mini" >
-                                    <AvatarImage />
+                                    <AvatarImage imageUrl={user?.image} />
                                 </Avatar>
                             </IconButton>
 
@@ -287,20 +293,23 @@ export default function Nav() {
                                         <Button
                                             href={setting.href}
                                             LinkComponent={NextLink}
-                                            variant="body2">
+                                            variant="body2"
+
+                                        >
                                             {setting.title}
                                         </Button>
 
                                     </MenuItem>
                                 ))}
-                                <MenuItem key={"logout-menu-item"} onClick={handleCloseUserMenu}>
-                                    <Button
-                                        key="logout"
-                                        onClick={logout}>
-                                        Çıkış
-                                    </Button>
-                                </MenuItem>
-
+                                <LogoutButton>
+                                    <MenuItem key={"logout-menu-item"} onClick={handleCloseUserMenu}>
+                                        <Button
+                                            key="logout"
+                                        >
+                                            Çıkış
+                                        </Button>
+                                    </MenuItem>
+                                </LogoutButton>
                             </Menu>
                         </Box>
                     </Toolbar>

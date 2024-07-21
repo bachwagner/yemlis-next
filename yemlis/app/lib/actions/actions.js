@@ -6,15 +6,19 @@ import User from '@/models/user'
 import { getUserByEmail } from '@/app/lib/data/user'
 import { signIn } from '@/auth'
 import { DEFAULT_LOGIN_REDIRECT_URL } from '@/routes'
-import { isRedirectError } from 'next/dist/client/components/redirect'
+import { isRedirectError, permanentRedirect } from 'next/dist/client/components/redirect'
 import { generateVerificationToken } from '../tokens'
 import { sendVerificationEmail } from '../mail'
+import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
 
 export async function authLogin(
-  values
+  values,
+  callbackUrl
 ) {
   const { email, password } = values
-
+  console.log("callbackurl")
+  console.log(callbackUrl)
   const validatedLoginParams = await login.validateAsync(
     { email, password })
   if (!validatedLoginParams) return { error: true, message: "validationError" }
@@ -28,24 +32,28 @@ export async function authLogin(
     const passwordsMatch = await bcrypt.compare(
       password, existingUser.password
     )
-    console.log("passwordsMatch ev")
-    console.log(passwordsMatch)
+
     if (!passwordsMatch) return { error: "true", message: "Geçersiz Kimlik Bilgileri" }
     /* PASSWORD CHECK ENDS */
     const verificationToken = await generateVerificationToken(existingUser.email)
 
     console.log("sending verification email")
-    await sendVerificationEmail(verificationToken.email,verificationToken.token)
+    await sendVerificationEmail(verificationToken.email, verificationToken.token)
 
     return { success: true, message: "Email Doğrulanmamış, Yeni Doğrulama Emaili Gönderildi." }
 
   }
   try {
+
     const signInLogin = await signIn("credentials", {
       email: validatedLoginParams.email,
       password: validatedLoginParams.password,
-      redirectTo: DEFAULT_LOGIN_REDIRECT_URL
+      // redirectTo: "/settings",/* callbackUrl || DEFAULT_LOGIN_REDIRECT_URL */
+      redirect: false,
+
     })
+    return { success: true, isRedirecting: true, callbackUrl}
+
 
   } catch (error) {
     console.log("login error type")
@@ -64,7 +72,7 @@ export async function authLogin(
 
         return { error: true, message: "Kimlik Bilgileri Geçersiz" }
       case "CallbackRouteError":
-        console.log("helo")
+        console.log("CallbackRouteError")
 
         return { error: true, message: "CallbackRouteErrorr" }
       default:
@@ -113,7 +121,7 @@ export async function authRegister(
     return { error: false, message: "Kayıt Başarılı, doğrulama e-maili gönderildi" }
 
   } catch (error) {
-    console.log("error")
+    console.log("verification error")
     console.log(error)
     return { error: true, message: "Kayıt Hatası, daha sonra tekrar deneyiniz" }
   }

@@ -3,7 +3,7 @@ import { Box, Button } from "@mui/material"
 import CustomLink from "@/components/inputs/CustomLink"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { UserButton } from "../../../components/auth/UserButton"
+import { UserButton } from "@/components/auth/UserButton"
 export const Navbar = () => {
     const pathname = usePathname()
     return (

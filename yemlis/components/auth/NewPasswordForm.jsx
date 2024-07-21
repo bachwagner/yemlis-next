@@ -11,7 +11,7 @@ import Alert from '@mui/material/Alert';
 import FormControl from '@mui/material/FormControl';
 import CustomLink from '@/components/inputs/CustomLink';
 import { Typography } from '@mui/material';
-import { newPassword } from '@/app/lib/new-password';
+import { newPassword } from '@/app/lib/actions/new-password';
 import { newPassword as passwordsValidation } from '@/app/lib/validationSchemas'
 import { useSearchParams } from 'next/navigation';
 

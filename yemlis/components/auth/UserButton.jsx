@@ -19,7 +19,7 @@ import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 
 
-export const UserButton = ({ children }) => {
+export const UserButton = () => {
     const user = useCurrentUser()
 
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -44,7 +44,10 @@ export const UserButton = ({ children }) => {
                         aria-haspopup="true"
                         aria-expanded={open ? 'true' : undefined}
                     >
-                        <Avatar sx={{ width: 32, height: 32 }} src={user?.image}>{firstLetter}</Avatar>
+                        <Avatar /* sx={{ width: 32, height: 32 }}  */
+                            src={user?.image}>
+                            {firstLetter}
+                        </Avatar>
                     </IconButton>
                 </Tooltip>
             </Box>
@@ -87,13 +90,19 @@ export const UserButton = ({ children }) => {
                     <ListItemIcon>
                         <PersonAdd fontSize="small" />
                     </ListItemIcon>
-                    Add another account
+                    Profil
+                </MenuItem>
+                <MenuItem onClick={handleClose}>
+                    <ListItemIcon>
+                        <PersonAdd fontSize="small" />
+                    </ListItemIcon>
+                    Topluluk
                 </MenuItem>
                 <MenuItem onClick={handleClose}>
                     <ListItemIcon>
                         <Settings fontSize="small" />
                     </ListItemIcon>
-                    Settings
+                    Ayarlar
                 </MenuItem>
                 <LogoutButton>
                     <MenuItem onClick={handleClose}>
@@ -103,7 +112,6 @@ export const UserButton = ({ children }) => {
                         Çıkış
                     </MenuItem>
                 </LogoutButton>
-
             </Menu>
         </React.Fragment>
     )

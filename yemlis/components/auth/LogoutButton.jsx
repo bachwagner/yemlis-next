@@ -4,8 +4,8 @@ import { signOut } from "next-auth/react"
 
 export const LogoutButton = ({ children }) => {
     const onClick = () => {
-        logout()
-        //signOut()
+       // logout()
+        signOut()
     }
     return (
         <span onClick={onClick}>
