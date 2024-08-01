@@ -1,4 +1,4 @@
-import Joi from "joi"
+import Joi, { string } from "joi"
 export const login = Joi.object({
     email: Joi.string().email({ tlds: { allow: false } }).messages({
         'string.email': 'Geçersiz  email adresi',
@@ -10,7 +10,7 @@ export const login = Joi.object({
     
 })
 export const settings = Joi.object({
-    name: Joi.string().pattern(/^[a-zA-Z]+$/).messages({
+    name: Joi.string().pattern(/^[a-zA-ZğüşöçıİĞÜŞÖÇ]+$/).messages({
         'string.base': 'Geçersiz isim',
         'string.pattern.base': 'Harf ve özel karakter içeremez',
     }),
@@ -30,6 +30,11 @@ export const settings = Joi.object({
 export const justEmail = Joi.object({
     email: Joi.string().email({ tlds: { allow: false } }).messages({
         'string.email': 'Geçersiz  email adresi',
+    })
+})
+export const deleteAccount = Joi.object({
+    demandType: Joi.string().max(50).valid("deleteAccount").messages({
+        "string.valid":"Invalid Delete Account Request"
     })
 })
 export const newPassword = Joi.object({

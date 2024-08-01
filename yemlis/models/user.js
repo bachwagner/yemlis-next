@@ -28,6 +28,11 @@ const userSchema = new Schema({
         default: "USER",
         enum: UserRoles,
     },
+    isMarkedToDelete:{
+        type:Boolean,
+        required:false,
+        default:false
+    },
    /*  accounts: {
         type: [String], //TODO [Accounts]
         required: false

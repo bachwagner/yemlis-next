@@ -5,6 +5,7 @@ export const publicRoutes = [
     "/auth/resetpassword",
     "/auth/reset-password",
     "/auth/new-password",
+   
 
 ]
 export const authRoutes = [
