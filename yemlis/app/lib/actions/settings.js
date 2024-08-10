@@ -1,7 +1,7 @@
 "use server"
 
 import { settings as settingsValidation } from "@/app/lib/validationSchemas"
-import User from "@/models/user"
+import User from "@/models/user/user"
 import { currentUser } from "../auth"
 import { getUserById, getUserByEmail } from "@/app/lib/data/user"
 import { generateVerificationToken } from "../tokens"

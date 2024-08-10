@@ -1,6 +1,6 @@
 
 export const publicRoutes = [
-    "/",
+    "/",  // TO CHECK
     "/auth/new-verification",
     "/auth/resetpassword",
     "/auth/reset-password",

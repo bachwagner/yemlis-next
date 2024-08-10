@@ -26,6 +26,7 @@ export default auth(async function middleware(req) {
         return null
     }
     if (isAuthRoute) {
+        console.log("auth route")
         /*  if (isLoggedIn) {
              console.log("logged in redirecting")
              return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT_URL, nextUrl))
@@ -63,6 +64,7 @@ export default auth(async function middleware(req) {
             ))
 
     }
+    if(isPublicRoute) console.log("public: ", nextUrl)
     console.log("route returning null ")
 
     return null

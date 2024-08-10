@@ -3,7 +3,7 @@ import authConfig from "./auth.config"
 import { MongoDBAdapter } from "@auth/mongodb-adapter"
 import clientPromise from "./app/lib/mongodb1"
 import { getUserById } from "./app/lib/data/user"
-import User from "./models/user"
+import User from "./models/user/user"
 import { getAccountByUserId } from "./app/lib/data/account"
 
 export const {

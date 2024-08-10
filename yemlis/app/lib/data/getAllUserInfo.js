@@ -1,5 +1,5 @@
 import connectDB from "@/app/lib/mongodb"
-import User from "@/models/user"
+import User from "@/models/user/user"
 import { auth } from "@/auth"
 
 export const getAllUserInfo = async (_id) => {

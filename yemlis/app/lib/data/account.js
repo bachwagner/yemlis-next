@@ -1,4 +1,4 @@
-import Account from "@/models/accounts"
+import Account from "@/models/user/accounts"
 export const getAccountByUserId = async (userId) => {
     console.log("userId")
     console.log(userId)

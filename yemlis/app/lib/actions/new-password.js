@@ -3,7 +3,7 @@ import { getUserByEmail } from "@/app/lib/data/user"
 import { newPassword as passwords } from "@/app/lib/validationSchemas"
 import { getPasswordResetTokenByToken } from "@/app/lib/data/passwordResetToken"
 import bcryptjs from "bcryptjs"
-import User from '@/models/user'
+import User from '@/models/user/user'
 export const newPassword = async (values, token) => {
     if (!token) {
         return { error: true, message: "Token Eksik" }

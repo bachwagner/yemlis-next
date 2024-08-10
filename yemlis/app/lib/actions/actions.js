@@ -2,7 +2,7 @@
 import { login, register } from '../validationSchemas'
 import connectDB from '../mongodb'
 import bcrypt from 'bcryptjs'
-import User from '@/models/user'
+import User from '@/models/user/user'
 import { getUserByEmail } from '@/app/lib/data/user'
 import { signIn } from '@/auth'
 import { DEFAULT_LOGIN_REDIRECT_URL } from '@/routes'

@@ -4,6 +4,7 @@ import { auth } from '@/auth'
 import ThemeRegistry from '@/styles/ThemeRegistry'
 import Nav from '@/components/Nav'
 import { Container, Box } from '@mui/material';
+import { getFoods } from '@/utils/food';
 const inter = Inter({ subsets: ['latin'] })
 const nunito = Nunito({ subsets: ['latin'] })
 const paytone = Paytone_One({ weight: "400", subsets: ['latin'] })
@@ -12,10 +13,12 @@ export const metadata = {
   title: 'Yemlis',
   description: 'Besin ve Menü Paylaşım Platformu',
 }
+
 export default async function RootLayout({ children }) {
   const session = await auth()
-  console.log("root session")
+  console.log("root session") 
   console.log(session)
+
   return (
     <SessionProvider session={session}  >
       <html lang="tr">

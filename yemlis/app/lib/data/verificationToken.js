@@ -1,4 +1,4 @@
-import VerificationToken from "@/models/verificationToken"
+import VerificationToken from "@/models/user/verificationToken"
 import connectDB from "@/app/lib/mongodb"
 export const getVerificationTokenByToken = async (token) => {
     try {

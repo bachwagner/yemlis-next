@@ -2,8 +2,8 @@
 
 import { getUserByEmail } from '@/app/lib/data/user'
 import { getVerificationTokenByToken } from '@/app/lib/data/verificationToken'
-import User from '@/models/user'
-import VerificationToken from '@/models/verificationToken'
+import User from '@/models/user/user'
+import VerificationToken from '@/models/user/verificationToken'
 import connectDB from "@/app/lib/mongodb";
 
 export const newVerification = async (token) => {

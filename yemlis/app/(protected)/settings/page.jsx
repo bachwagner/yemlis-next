@@ -19,7 +19,7 @@ const SettingsPage = () => {
     console.log({ user })
 
     useEffect(() => {
-        fetch(`/api/user?id=${user._id}`, { next: { revalidate: 5 } })
+        fetch(`/api/user?id=${user._id}`, { next: { revalidate: 5 } }) //TODO
             .then((res) => res.json())
             .then((data) => {
                 console.log("dataxx")

@@ -1,5 +1,5 @@
 
-import PasswordResetToken from "@/models/passwordResetToken"
+import PasswordResetToken from "@/models/user/passwordResetToken"
 import connectDB from "@/app/lib/mongodb"
 
 export const getPasswordResetTokenByToken = async (token) => {

@@ -2,8 +2,8 @@
 import { getVerificationTokenByEmail } from "@/app/lib/data/verificationToken"
 import { v4 as uuidv4 } from "uuid"
 import connectDB from "./mongodb"
-import VerificationToken from "@/models/verificationToken"
-import PasswordResetToken from "@/models/passwordResetToken"
+import VerificationToken from "@/models/user/verificationToken"
+import PasswordResetToken from "@/models/user/passwordResetToken"
 import { getPasswordResetTokenByEmail } from "./data/passwordResetToken"
 
 export const generateVerificationToken = async (email) => {

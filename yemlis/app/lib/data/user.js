@@ -1,5 +1,5 @@
 import connectDB from "@/app/lib/mongodb";
-import User from "@/models/user";
+import User from "@/models/user/user";
 export const getUserByEmail = async (email) => {
     try {
         await connectDB()
