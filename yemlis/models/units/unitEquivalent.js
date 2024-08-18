@@ -12,7 +12,7 @@ const UnitEq = new mongoose.Schema({
         max: [100000000000, "to high unit equals"]
     } 
 })
-const unitEquivalent = new mongoose.Schema({
+const UnitEquivalent = new mongoose.Schema({
     name: {
         type: String,
         minLength: [3, "Too Short 'unitEquivalent' name"],
@@ -30,9 +30,9 @@ const unitEquivalent = new mongoose.Schema({
 })
 
 
-unitEquivalent.query.byName = async function (name) {
+UnitEquivalent.query.byName = async function (name) {
     return await this.where({ name: new RegExp(name, 'i') });
 };
 
 
-export default  models?.UnitEquivalent || mongoose.model("UnitEquivalent", unitEquivalent);
+export default  models?.UnitEquivalent || mongoose.model("UnitEquivalent", UnitEquivalent);

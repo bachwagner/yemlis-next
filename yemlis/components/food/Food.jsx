@@ -1,5 +1,5 @@
-"use client"
-import * as React from 'react';
+"use client"  //main page
+import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -17,6 +17,13 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Image from 'next/image';
 import Box from "@mui/material/Box"
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import { likeFood, saveFood } from '@/app/lib/actions/food';
+
+import { useFormState } from 'react-dom'
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -29,13 +36,28 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
+
 export default function Food({ food }) {
-  const [expanded, setExpanded] = React.useState(false);
-  console.log("fooddd")
-  console.log(food)
+
+  const [expanded, setExpanded] = useState(false);
   const handleExpandClick = () => {
     setExpanded(!expanded);
+  }
+  const [likeInfos, likeFormAction] = useFormState(likeFood, { likes: food.likes.length, isLiked: food.userRelations.isLiked })
+  const [saveInfos, saveFormAction] = useFormState(saveFood, { isSaved: food.userRelations.isSaved })
+  console.log("userRelations")
+  console.log(food.userRelations)
+
+  const [anchorEl, setAnchorEl] = useState(null)
+
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
   };
+  const handleClose = () => {
+    setAnchorEl(null);
+  }
+
   const foodImage = food.image || "noFoodImage.png"
   return (
     <Box display="flex" alignItems="center" justifyContent="center">
@@ -47,9 +69,28 @@ export default function Food({ food }) {
             </Avatar>
           }
           action={
-            <IconButton aria-label="settings">
-              <MoreVertIcon />
+            <><IconButton aria-label="settings">
+              <MoreVertIcon
+                id="food-options"
+                aria-controls={open ? 'food-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? 'true' : undefined}
+                onClick={handleClick}
+              />
             </IconButton>
+              <Menu
+                id="food-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                MenuListProps={{
+                  'aria-labelledby': 'food-options',
+                }}
+              >
+                <MenuItem onClick={handleClose}>Bunu Gösterme</MenuItem>
+                <MenuItem onClick={handleClose}>Şikayet Et</MenuItem>
+              </Menu>
+            </>
           }
           title={food.name}
           subheader={food?.organisation?.name || ""}
@@ -78,23 +119,57 @@ export default function Food({ food }) {
             {food.description}
           </Typography>
         </CardContent>
-        <CardActions disableSpacing>
-          <IconButton aria-label="add to favorites">
-            <FavoriteIcon sx={{ color: food.userRelation?.isLiked ? "crimson" : "inherit" }} />
-          </IconButton>
-          <IconButton aria-label="share">
-            <ShareIcon />
-          </IconButton>
-          <ExpandMore
-            expand={expanded}
-            onClick={handleExpandClick}
-            aria-expanded={expanded}
-            aria-label="show more"
-          >
-            <ExpandMoreIcon />
-          </ExpandMore>
-        </CardActions>
+        <CardActions disableSpacing sx={{ display: "block" }}>
+          <Box display="flex" alignItems="center" justifyContent="space-between">
+            <Box display="flex" alignItems="center" justifyContent="left">
+              <form action={likeFormAction} style={{ display: "block" }}>
+                <input
+                  name='foodId'
+                  value={food._id}
+                  type="hidden" />
+                <input
+                  name='isLiked'
+                  value={likeInfos?.isLiked || ""}
+                  type="hidden" />
+                <IconButton type='submit' aria-label="add to favorites">
+                  <FavoriteIcon sx={{ color: likeInfos?.isLiked ? "crimson" : "inherit" }} />
+                  <span style={{ fontSize: "16px" }}>{likeInfos?.likes}</span>
+                </IconButton>
+                <IconButton aria-label="share">
+                  <ShareIcon />
+                </IconButton>
+                <ExpandMore
+                  expand={expanded}
+                  onClick={handleExpandClick}
+                  aria-expanded={expanded}
+                  aria-label="show more" >
 
+                  <ExpandMoreIcon />
+                </ExpandMore>
+              </form>
+            </Box>
+
+            <Box display="flex" alignItems="center" justifyContent="flex-end">
+              <form action={saveFormAction} style={{ display: "block" }}>
+                <input
+                  name='foodId'
+                  value={food._id}
+                  type="hidden" />
+                <input
+                  name='isSaved'
+                  value={saveInfos?.isSaved || ""}
+                  type="hidden" />
+                <IconButton type='submit' aria-label="save food">
+                  {!saveInfos.isSaved ?
+                    <BookmarkBorderIcon />
+                    : <BookmarkIcon />}
+                </IconButton>
+              </form>
+            </Box>
+
+          </Box>
+
+        </CardActions>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
             <Typography fontWeight="bold" >100 gram</Typography>
@@ -116,6 +191,6 @@ export default function Food({ food }) {
         </Collapse>
 
       </Card>
-    </Box>
+    </Box >
   );
 }

@@ -9,6 +9,7 @@ import Unit from '@/models/units/unit'
 import unitEquivalent from '@/models/units/unitEquivalent'
 import Item from '@/models/components/item'
 import Organisation from '@/models/organisations/organisations'
+import { currentUser } from '@/app/lib/auth'
 export async function GET(req) {
     console.log("Food Get request received")
 
@@ -18,7 +19,7 @@ export async function GET(req) {
         const search = searchParams.get('search')
         const offset = searchParams.get('offset')
         const limit = searchParams.get('limit')
-        console.log("search params")
+        console.log("search params food")
         console.log(search)
         console.log(offset)
         console.log(limit)
@@ -67,11 +68,37 @@ export async function GET(req) {
                 .populate({ path: 'organisation', model: Organisation })
             console.log("route handler-search food")
             console.log(foods)
+            if (foods.length === 0) {
+                return NextResponse.json(
+                    JSON.parse(JSON.stringify({ notFound: true, message: "Aranan Besin Bulunamadı" }))
+                    , { status: 200 })
+
+            }
+            const user = await currentUser()
+            if (user) { // add foods user releated infos such as likes
+                const getUser = await User.findById(user._id)
+
+                const foodsForUser = foods.map((f, i) => {
+                    const isLiked = f.likes?.includes(user._id) ? true : false
+                    const isSaved = getUser?.bookmarks?.find(b => b?.element?.equals(f._id))
+
+                    return ({ ...f._doc, userRelations: { isLiked: isLiked, isSaved: isSaved } })
+                })
+
+                return NextResponse.json(
+                    JSON.parse(JSON.stringify(foodsForUser))
+                    , { status: 200 })
+            }
+
             return NextResponse.json(
                 JSON.parse(JSON.stringify(foods))
                 , { status: 200 })
+
+
         } else {
-            const foods = await Food.find({ name: { $regex: search, $options: "i" } }).skip(offset)
+            const foods = await Food.find({
+                name: { $regex: search, $options: "i" }
+            }).skip(offset)
                 .limit(limit)
                 .populate({
                     path: "quantitativeValues",
@@ -112,6 +139,27 @@ export async function GET(req) {
                     }],
                 })
                 .populate({ path: 'organisation', model: Organisation })
+            if (foods.length === 0) {
+                return NextResponse.json(
+                    JSON.parse(JSON.stringify({ notFound: true, message: "Aranan Besin Bulunamadı" }))
+                    , { status: 200 })
+            }
+            const user = await currentUser()
+            if (user) { // add foods user releated infos such as likes
+                const getUser = await User.findById(user._id)
+
+                const foodsForUser = foods.map((f, i) => {
+                    const isLiked = f.likes?.includes(user._id) ? true : false
+                    const isSaved = getUser?.bookmarks?.find(b => b?.element?.equals(f._id))
+
+                    return ({ ...f._doc, userRelations: { isLiked: isLiked, isSaved: isSaved ? true : false } })
+                })
+
+                return NextResponse.json(
+                    JSON.parse(JSON.stringify(foodsForUser))
+                    , { status: 200 })
+            }
+
             console.log("route handler-search food regex")
             console.log(foods)
 

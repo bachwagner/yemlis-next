@@ -1,6 +1,13 @@
 import mongoose, { Schema, models } from "mongoose"
 const UserRoles = ["ADMIN", "USER"]
 
+const bookmark = new Schema({
+    type: String, //food, list,
+    element: Schema.Types.ObjectId,  //food, list
+    date: Date,
+
+})
+
 const userSchema = new Schema({
     email: {
         type: String,
@@ -28,19 +35,20 @@ const userSchema = new Schema({
         default: "USER",
         enum: UserRoles,
     },
-    isMarkedToDelete:{
-        type:Boolean,
-        required:false,
-        default:false
+    isMarkedToDelete: {
+        type: Boolean,
+        required: false,
+        default: false
     },
-   /*  accounts: {
-        type: [String], //TODO [Accounts]
-        required: false
-    } */
+    /*  accounts: {
+         type: [String], //TODO [Accounts]
+         required: false
+     } */
     accounts: {
         type: [{ type: Schema.Types.ObjectId, ref: 'Account' }], //TODO [Accounts]
         required: false
-    } 
+    },
+    bookmarks: [bookmark]
 
 }, {
     timestamps: true
