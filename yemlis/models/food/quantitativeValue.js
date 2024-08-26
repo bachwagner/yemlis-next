@@ -12,7 +12,7 @@ const quantitativeValue = new mongoose.Schema({
     },
     quantitative: { // vita, mg  // will be paired with food's standart measure e.g. 1 gr=>
         type: mongoose.Schema.Types.ObjectId,
-        ref: "quant"
+        ref: "quantitative"
     },
     perMain: { // describes 100 gram apples's 100
         type: Number,

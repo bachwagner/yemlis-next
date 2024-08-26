@@ -6,8 +6,8 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-function SelectFoodPortions({portions}) {
-    const [portion, setPortion] = useState('100 gram');
+function SelectFoodPortions({ portions }) {
+    const [portion, setPortion] = useState("100 gram");
 
     const handleChange = (event) => {
         setPortion(event.target.value);
@@ -23,12 +23,12 @@ function SelectFoodPortions({portions}) {
                     label="Besin Porsiyon"
                     onChange={handleChange}
                     size='small'
-                    sx={{fontSize:22}}
-                    
+                    sx={{ fontSize: 22 }}
                 >
-                    <MenuItem value="100 gram">100 gram</MenuItem>
-                    <MenuItem value="1 Küçük Boy">1 Küçük Boy</MenuItem>
-                    <MenuItem value="1 Orta Boy">1 Orta Boy</MenuItem>
+                    <MenuItem value={"100 gram"} >100 gram</MenuItem>
+                    {portions.map(fp =>
+                        <MenuItem key={fp.modifier} value={fp.modifier} >{fp.modifierTR ? fp.modifierTR : fp.modifier}</MenuItem>)}
+
                 </Select>
             </FormControl>
         </Box>

@@ -1,6 +1,5 @@
 "use server"
 import { Container, Typography, Box, Paper, Grid, Button, LinearProgress, Stack, Chip } from '@mui/material';
-import CustomLink from '@/components/inputs/CustomLink'
 import Image from 'next/image';
 import MacroChart from '@/components/food/singular/MacroChart';
 import { notFound } from 'next/navigation';
@@ -9,8 +8,11 @@ import FeedBacks from '@/components/food/singular/FeedBacks';
 import SelectFoodPortions from '@/components/food/singular/SelectFoodPortions';
 import NutrientTable from '@/components/food/singular/NutrientTable';
 import FoodBands from '@/components/food/singular/FoodBands';
-
-
+import FoodOptions from '@/components/food/FoodOptions';
+import CustomLink from '@/components/inputs/CustomLink';
+import VerifiedIcon from '@mui/icons-material/Verified';
+import GlycemicIndex from '@/components/food/singular/GlycemicIndex';
+import GlycemicLoad from '@/components/food/singular/GlycemicLoad';
 /* export async function generateStaticParams() { //TODO
     // const posts = await getFoods(null,0,10)
     // `/api/foods?offset=${offset}&limit=${NUMBER_OF_FOODS_TO_FETCH}&search=${search}`
@@ -22,16 +24,92 @@ import FoodBands from '@/components/food/singular/FoodBands';
     }))
 } */
 //export const revalidate = 3600
+
+/* const eNutrientTableInfos = {
+    tableName:"Etken Maddeler",
+    headCells: [
+        {
+            id: 'enutrient',
+            numeric: false,
+            disablePadding: true,
+            label: 'Etken Madde'
+        },
+        {
+            id: 'value',
+            numeric: true,
+            disablePadding: false,
+            label: 'Miktar',
+        },
+        {
+            id: 'unit',
+            numeric: true,
+            disablePadding: false,
+            label: 'Birim',
+        }
+    ],
+    elements: [{
+        id: 1,
+        nutrient: "Lactobacillus Acidophilus",
+        value: "2*10^9",
+        unit: 'kob'
+    }, {
+        id: 2,
+        nutrient: "Bifidobacterium longum",
+        value: "2*10^9",
+        unit: 'kob'
+    },{
+        id: 3,
+        nutrient: "Bifidobacterium bifidium",
+        value: "1*10^9",
+        unit: 'kob'
+    }]
+} */
+
+const tags = [
+    { name: "vegan", label: "Vegan Besin", image: "vegan", text: "Vegan Besin Açıklaması" },
+    { name: "milk", label: "Süt", image: "milk", text: "Bu ürün süt ürünü olup laktoz ve kazein içerir." },
+    { name: "toxic", label: "Toxic", image: "toxic", text: "Toksik Ürün" },
+    { name: "caution", label: "Dikkatli Tüketim Gerekli", image: "caution", text: "Dikkatli Tüketim Gereken Ürün" },
+    { name: "highGI", label: "Yüksek Glisemik İndeks", image: "highGI", text: "Kan şekerini hızlı yükseltir" },
+]
 export default async function FoodDetails({ params }) {
     const foodId = params.foodId
     if (!foodId) notFound()
     const food = await getFood(foodId)
-    console.log("food dynamic")
-    console.log(food)
+
     if (food.error) {
         notFound()
     }
-
+    const calorie = food.quantitativeValues[1]?.value
+    const GI = food.quantitativeValues?.find(q => q.name === "Glycemix Index")?.value
+    const GL = food.quantitativeValues?.find(q => q.name === "Glycemix Load")?.value
+    console.log("GII")
+    console.log(GI)
+    console.log(GL)
+    const nutrientTableInfos = {
+        tableName: "Besin Öğeleri",
+        headCells: [
+            {
+                id: 'nutrient',
+                numeric: false,
+                disablePadding: true,
+                label: 'Besin Öğeleri'
+            },
+            {
+                id: 'value',
+                numeric: true,
+                disablePadding: false,
+                label: 'Miktar',
+            },
+            {
+                id: 'unit',
+                numeric: true,
+                disablePadding: false,
+                label: 'Birim',
+            }
+        ],
+        elements: [...food.nutritionValues]
+    }
     /*  const Item = styled(Paper)(({ theme }) => ({
          backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
          ...theme.typography.body2,
@@ -49,17 +127,31 @@ export default async function FoodDetails({ params }) {
                             <Typography align='left' variant="h1" fontSize={36} p={1}>{food?.name}</Typography>
                         </Paper>
                         <Box display="flex" p={1}>
-                            Options
+                            <FoodOptions foodId={food._id} />
                         </Box>
                     </Box>
                 </Grid>
                 <Grid item xs={12}>
                     <Box display="flex" width="100%" justifyContent="space-between" alignItems="center">
-                        <Paper sx={{ textAlign: 'center' }} >
-                            <Typography align='left' variant="h3" fontSize={18} p={1}>Üretici Firma: Neilson</Typography>
-                        </Paper>
+                        <Box>
+                            <Paper sx={{ display: "inline-flex", alignItems: "center", textAlign: 'center', p: 1 }} >
+                                <Typography align='left' alignItems="center" variant="h3" fontSize={18} p={1}>
+                                    Üretici Firma:{
+                                        food.manufacturer?.organisation
+                                            ? <CustomLink label={food.manufacturer?.name} target={food.manufacturer?.organisation?.profileLink} variant="h3" />
+                                            : food.manufacturer?.name}  </Typography>
+                                {food.manufacturer?.organisation.isVerified && <VerifiedIcon />}
+                            </Paper>
+                        </Box>
                         <Box display="flex" p={1}>
-                            <Typography align='left' variant="h3" fontSize={18} p={1}>Ekleyen: Uzm. Dyt. Mustafa Turgut</Typography>
+                            <Paper sx={{ display: "inline-flex", alignItems: "center", textAlign: 'center', p: 1 }} >
+                                <Typography align='left' variant="h3" fontSize={18} p={1}>Ekleyen:
+                                    <CustomLink
+                                        label={food.creationInfos?.creator?.name}
+                                        target={food.creationInfos?.creator?.profileLink}
+                                        variant="h3" /> </Typography>
+                                {food.creationInfos?.creator?.isVerified && <VerifiedIcon />}
+                            </Paper>
                         </Box>
                     </Box>
                 </Grid>
@@ -67,10 +159,10 @@ export default async function FoodDetails({ params }) {
                     <Grid item xs={12} md={6}>
                         <Paper sx={{ textAlign: 'center', height: 300 }} >
                             <Box><Image
-                                src={`/static/images/foods/milk.jpeg`}
+                                src={`/static/images/foods/${food.image}`}
                                 height={250}
                                 width={350}
-                                alt="paella"
+                                alt={`${food.name} resmi`}
                             /></Box>
                             <Box><FeedBacks food={food} /></Box>
                         </Paper>
@@ -79,13 +171,8 @@ export default async function FoodDetails({ params }) {
                     <Grid item xs={12} md={6}>
                         <Paper sx={{ textAlign: 'center', minHeight: 300 }} >
                             <Typography align='left' variant="body1" fontSize={18} p={2}>
-                                Bütün canlılar gibi insanlar da sütle yaşamın ilk
-                                günlerinde tanışır. Süt, içeriğinde insan vücudunun
-                                temel ihtiyaçlarını karşılamaya yetecek ölçüde besin maddesi bulunduran
-                                ve sayısız faydası olan bir gıda çeşididir. Temel besin maddelerinden biri
-                                olan sütten pek çok farklı yiyecek elde edilir. Süt ürünleri olarak bilinen
-                                bu besinlere, ham maddesi süt olan yoğurt, ayran, farklı peynir çeşitleri,
-                                kaymak ve tereyağı gibi besinler örnek olarak verilebilir.</Typography>
+                                {food.text?.tr ? food.text?.tr : food.text?.en}
+                            </Typography>
                         </Paper>
                     </Grid>
                 </Grid>
@@ -96,33 +183,18 @@ export default async function FoodDetails({ params }) {
                             <Typography fontSize={24} mr={1}>
                                 Porsiyon:
                             </Typography>
-                            <SelectFoodPortions />
+                            <SelectFoodPortions portions={food.foodPortions} />
                         </Box>
                     </Paper>
                 </Grid>
                 <Grid item xs={12} md={12}>
                     <Paper sx={{ p: 1 }}>
                         <Typography fontSize={24}>
-                            Kalori: {food.quantitativeValues[1].value} kkal
+                            Kalori: {calorie} kkal
                         </Typography>
                     </Paper>
                 </Grid>
-                <Grid item xs={12} sm={6} md={6}>
-                    <Paper sx={{ p: 1 }}>
-                        Glisemik İndeks: 35
-                        <Box sx={{ width: '100%' }}>
-                            <LinearProgress sx={{ height: 15 }} color="success" variant="determinate" value={35} />
-                        </Box>
-                    </Paper>
-                </Grid>
-                <Grid item xs={12} sm={6} md={6}>
-                    <Paper sx={{ p: 1 }}>
-                        Glisemik Yük: 15
-                        <Box sx={{ width: '100%' }}>
-                            <LinearProgress sx={{ height: 15 }} color="warning" variant="determinate" value={35} />
-                        </Box>
-                    </Paper>
-                </Grid>
+
                 <Grid item xs={12} sm={6}>
                     <Paper sx={{ p: 1 }}>
                         <MacroChart />
@@ -130,7 +202,17 @@ export default async function FoodDetails({ params }) {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <Paper sx={{ p: 1 }}>
-                        <FoodBands />
+                        <FoodBands tags={tags} />
+                    </Paper>
+                </Grid>
+                <Grid item xs={12} sm={6} md={6}>
+                    <Paper sx={{ p: 1 }}>
+                        <GlycemicIndex value={GI}/>
+                    </Paper>
+                </Grid>
+                <Grid item xs={12} sm={6} md={6}>
+                    <Paper sx={{ p: 1 }}>
+                       <GlycemicLoad value={GL}/>
                     </Paper>
                 </Grid>
                 <Grid item xs={12} sm={12} >
@@ -141,15 +223,39 @@ export default async function FoodDetails({ params }) {
                         <Box>
                             <Stack direction="row" spacing={1}>
                                 <Chip label="İnek Sütü" variant="outlined" />
+                                <Chip label="Fıstık" variant="outlined" />
+                                <Chip label="Kakao" variant="outlined" />
+                                <Chip label="Aspartam (E951)" variant="outlined" />
+                                <Chip label="Şeker" variant="outlined" />
+                                <Chip label="sitrik asit" variant="outlined" />
+                                <Chip label="Aspartam (E951)" variant="outlined" />
                             </Stack>
+
                         </Box>
                     </Paper>
                 </Grid>
-                <Grid item xs={12} sm={12} >
+                <Grid item xs={12} sm={12} md={6} >
+                    <Box display="flex" justifyContent="space-between">
+                        <Typography variant="h3" fontSize={18} p={1}>Besin Öğeleri</Typography>
+                        <Paper sx={{ textAlign: 'center' }} >
+                            <Typography align='left' variant="h3" fontSize={18} p={1}>
+                                <CustomLink label={food.source} target="/usda" variant="h3" /></Typography>
+                        </Paper>
+                    </Box>
                     <Paper sx={{ p: 1 }}>
-                        <NutrientTable />
+                        <NutrientTable tableInfos={nutrientTableInfos} />
                     </Paper>
                 </Grid>
+                {/*  <Grid item xs={12} sm={12} md={6} >
+                <Typography variant="h3"fontSize={22} p={1}>Etken Maddeler</Typography>
+                    <Paper sx={{ p: 1 }}>
+                        <NutrientTable tableInfos={eNutrientTableInfos} />
+                    </Paper>
+                    <Typography variant="h3"fontSize={22} p={1}>Diğer Maddeler ve Kimyasallar</Typography>
+                    <Paper sx={{ p: 1 }}>
+                        <NutrientTable tableInfos={eNutrientTableInfos} />
+                    </Paper>
+                </Grid> */}
 
 
             </Grid>

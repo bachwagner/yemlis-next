@@ -8,6 +8,8 @@ const organisation = new mongoose.Schema({
         maxLength: [50, "Too Long Organisation Name"],
         required: [true, "Organisation Name is Required"],
     },
+    isConfirmed: Boolean,
+    isVerified:Boolean,
     website: {
         type: String,
         minLength: [1, "Too Short Website Adress"],
@@ -22,6 +24,11 @@ const organisation = new mongoose.Schema({
         type: String,
         minLength: [1, "Too Short Organisation Info"],
         maxLength: [200, "Too Long Organisation Info"],
+    },
+    profileLink:{
+        type: String,
+        minLength: [1, "Too Short profileLink Info"],
+        maxLength: [200, "Too Long profileLink Info"],
     },
     organisationType: {
         type: String,

@@ -75,9 +75,9 @@ const foodCategorie = mongoose.Schema({ //Scientific Categorie+value
             editHistory: {
                 edits: [Object],
 
-
+ 
             }
-        }
+        } 
     }
 })
 

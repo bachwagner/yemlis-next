@@ -7,7 +7,7 @@ export const login = Joi.object({
         'string.min': 'Şifre en az 6 karakter içermeli',
         'string.empty': 'Şifre alanı gerekli',
     }),
-    
+
 })
 export const settings = Joi.object({
     name: Joi.string().pattern(/^[a-zA-ZğüşöçıİĞÜŞÖÇ]+$/).messages({
@@ -25,7 +25,7 @@ export const settings = Joi.object({
         'string.min': 'Şifre en az 6 karakter içermeli',
         'string.empty': 'Yeni Şifre alanı gerekli',
     })
- 
+
 })
 export const justEmail = Joi.object({
     email: Joi.string().email({ tlds: { allow: false } }).messages({
@@ -34,7 +34,7 @@ export const justEmail = Joi.object({
 })
 export const deleteAccount = Joi.object({
     demandType: Joi.string().max(50).valid("deleteAccount").messages({
-        "string.valid":"Invalid Delete Account Request"
+        "string.valid": "Invalid Delete Account Request"
     })
 })
 export const newPassword = Joi.object({
@@ -58,9 +58,31 @@ export const register = Joi.object({
     repeatpassword: Joi.string().valid(Joi.ref('password')).required().messages({ 'any.only': 'Şifreler Eşleşmeli' }),
     acceptmails: Joi.boolean(),
     acceptterms: Joi.boolean().invalid(false)
-}).with("password","repeatpassword")
+}).with("password", "repeatpassword")
 
-
+export const foodGroup = Joi.object({
+    name: Joi.string().min(2).max(120).pattern(/^[a-zA-ZğüşöçıİĞÜŞÖÇ]+$/).messages({
+        'string.base': 'Geçersiz Besin Gurubu İsmi',
+        'string.pattern.base': 'Harf ve özel karakter içeremez',
+        'string.min': 'Besin Gurubu en az 2 karakter içermeli',
+        'string.max': 'Besin Gurubu en fazla 255 karakter içermeli',
+        'string.empty': 'Besin Gurubu alanı gerekli',
+    }),
+    parent: Joi.string().length(24).pattern(/^[a-zA-ZğüşöçıİĞÜŞÖÇ]+$/).messages({
+        'string.base': 'Geçersiz Besin Gurubu İsmi',
+        'string.pattern.base': 'Harf ve özel karakter içeremez',
+        'string.length': 'Geçersiz Parent Id',
+        'string.empty': 'Besin Gurubu alanı gerekli',
+    }),
+    text: Joi.string().min(2).max(255).pattern(/^[a-zA-ZğüşöçıİĞÜŞÖÇ]+$/).messages({
+        'string.base': 'Geçersiz Besin Gurubu İsmi',
+        'string.pattern.base': 'Harf ve özel karakter içeremez',
+        'string.min': 'Besin Gurubu en az 2 karakter içermeli',
+        'string.max': 'Besin Gurubu en fazla 255 karakter içermeli',
+        'string.empty': 'Besin Gurubu alanı gerekli',
+    }),
+    tags: Joi.array().items(Joi.string().min(2).max(20)).max(5).required()
+})
 /* .equal(Joi.ref('password'))
     .required()
     .label('Confirm password')

@@ -25,9 +25,15 @@ const userSchema = new Schema({
         type: Date,
         required: false
     },
+    isVerified:Boolean,
     image: {
         type: String,
         required: false
+    },
+    profileLink:{
+      type:String,
+      minLength:2,
+      maxLength:100
     },
     role: {
         type: String,  //TODO userRole

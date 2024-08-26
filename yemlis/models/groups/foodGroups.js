@@ -14,20 +14,20 @@ const foodGroups = new mongoose.Schema({
         max: [9999, "too long foodGroup foodId"],
     },
     parent: {
-        type: mongoose.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "foodGroups"
     },
     tags: {
         type: [String],
         maxLength: [30, "too many foodGroups tags"]
     },
-    children: [{ type: mongoose.Types.ObjectId, ref: 'foodGroups' }],
-    creationInfos
+    children: [{ type: mongoose.Schema.Types.ObjectId, ref: 'foodGroups' }],
+    creationInfos 
 
-})
+}) 
 
-export default mongoose.models?.FoodGroups || mongoose.model('FoodGroups',foodGroups)
-
+const FoodGroups = mongoose.models?.FoodGroups || mongoose.model("FoodGroups", foodGroups)
+export default FoodGroups
 
 
 /*  const mainFoodGroups = [

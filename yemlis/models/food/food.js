@@ -3,6 +3,8 @@ import creationInfos from '../groups/schemas.js'
 import mongoose from 'mongoose'
 import nutritionValue from './nutritionValue.js'
 import quantitativeValue from './quantitativeValue.js'
+import text from './text.js'
+import manufacturer from './manufacturer.js'
 const humanHealthEffectEnums = ["healthy", "neutral", "notHealthy", "harmful", "toxic"]
 const sourceTypeEnums = ["user", "institution", "person", "link"]
 
@@ -39,13 +41,19 @@ const food = new mongoose.Schema({
         minLength: 5,
         maxLength: 60,
     },
+    text: text,
     standartMeasure: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "unit"
     },
     foodPortions: [
         {
-            modifier: {
+            modifier: { //EN
+                type: String,
+                minLength: 1,
+                maxLength: 128
+            },
+            modifierTR: { 
                 type: String,
                 minLength: 1,
                 maxLength: 128
@@ -97,6 +105,7 @@ const food = new mongoose.Schema({
     nutritionValues: [nutritionValue], // magnessium  5 mg
     quantitativeValues: [quantitativeValue], // energy 100 kcal
     creationInfos,
+    manufacturer,
     likes: [mongoose.Schema.Types.ObjectId]
 })
 

@@ -17,9 +17,9 @@ export const getFoods = cache(async (search = null, offset = 0, limit = 10) => {
     console.log(search)
     try {
         await connectDB()
-        console.log("after connecct")
 
         if (!search) {
+            console.log("searchingg")
 
             const foods = await
                 Food.find()
@@ -64,6 +64,8 @@ export const getFoods = cache(async (search = null, offset = 0, limit = 10) => {
                         }],
                     })
                     .populate({ path: 'organisation', model: Organisation })
+                   
+                  
 
             const user = await currentUser()
             console.log("!search")
@@ -132,6 +134,8 @@ export const getFoods = cache(async (search = null, offset = 0, limit = 10) => {
                     }],
                 })
                 .populate({ path: 'organisation', model: Organisation })
+              
+
             console.log("regex-foodssss")
             console.log(foods)
 
@@ -210,8 +214,9 @@ export const getFood = cache(async (id) => {
                         }]
                     }],
                 })
-                .populate({ path: 'organisation', model: Organisation })
-
+                .populate({ path: 'manufacturer.organisation', model: Organisation })
+                .populate({ path: 'creationInfos.creator', model: User })
+                
         const user = await currentUser()
 
         if (user) { // add foods user releated infos such as likes

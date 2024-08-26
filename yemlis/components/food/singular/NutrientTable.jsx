@@ -24,10 +24,6 @@ function createData(id, nutrient, value, unit) {
         unit
     }
 }
-const rows = [
-    createData(1, 'Karbonhidrat', 305, "gr"),
-    createData(2, 'Protein', 452, "gr")
-]
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -61,29 +57,8 @@ function stableSort(array, comparator) {
     return stabilizedThis.map((el) => el[0]);
 }
 
-const headCells = [
-    {
-        id: 'nutrient',
-        numeric: false,
-        disablePadding: true,
-        label: 'Besin Öğeleri'
-    },
-    {
-        id: 'value',
-        numeric: true,
-        disablePadding: false,
-        label: 'Miktar',
-    },
-    {
-        id: 'unit',
-        numeric: true,
-        disablePadding: false,
-        label: 'Birim',
-    }
-];
-
 function EnhancedTableHead(props) {
-    const { order, orderBy, onRequestSort } =
+    const { headCells, order, orderBy, onRequestSort } =
         props;
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
@@ -119,45 +94,31 @@ function EnhancedTableHead(props) {
 }
 
 EnhancedTableHead.propTypes = {
+    tableName: PropTypes.string.isRequired,
+    headCells: PropTypes.array.isRequired,
     onRequestSort: PropTypes.func.isRequired,
     order: PropTypes.oneOf(['asc', 'desc']).isRequired,
     orderBy: PropTypes.string.isRequired,
 };
 
 function EnhancedTableToolbar(props) {
-    const { numSelected } = props;
-
+    const { tableName } = props;
     return (
         <Toolbar
+        disableGutters={true}
             sx={{
                 pl: { sm: 2 },
                 pr: { xs: 1, sm: 1 },
-                ...(numSelected > 0 && {
-                    bgcolor: (theme) =>
-                        alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
-                }),
             }}
         >
-            {numSelected > 0 ? (
-                <Typography
-                    sx={{ flex: '1 1 100%' }}
-                    color="inherit"
-                    variant="subtitle1"
-                    component="div"
-                >
-                    {numSelected} selected
-                </Typography>
-            ) : (
                 <Typography
                     sx={{ flex: '1 1 100%' }}
                     variant="h6"
                     id="tableTitle"
                     component="div"
                 >
-                    Besin Öğeleri
+                    {tableName}
                 </Typography>
-            )}
-
         </Toolbar>
     );
 }
@@ -166,7 +127,7 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable() {
+export default function EnhancedTable({ tableInfos }) {
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('nutrient');
 
@@ -175,7 +136,7 @@ export default function EnhancedTable() {
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
     };
-
+    const rows = tableInfos?.elements?.map((ti,i) => createData(i, ti?.nutrient?.name, ti?.value, ti?.unit?.abbr))
     const visibleRows = React.useMemo(
         () =>
             stableSort(rows, getComparator(order, orderBy)).slice(),
@@ -184,15 +145,15 @@ export default function EnhancedTable() {
 
     return (
         <Box sx={{ width: '100%' }}>
-            <Paper sx={{ width: '100%', mb: 2 }}>
-                <EnhancedTableToolbar />
                 <TableContainer>
                     <Table
-                        sx={{ minWidth: 750 }}
+                        sx={{ minWidth: 400 }}
                         aria-labelledby="tableTitle"
                         size='medium'
                     >
                         <EnhancedTableHead
+                            tableName={tableInfos.tableName}
+                            headCells={tableInfos.headCells}
                             order={order}
                             orderBy={orderBy}
                             onRequestSort={handleRequestSort}
@@ -225,7 +186,6 @@ export default function EnhancedTable() {
                     </Table>
                 </TableContainer>
 
-            </Paper>
         </Box>
     );
 }

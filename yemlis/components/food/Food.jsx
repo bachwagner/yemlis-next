@@ -43,8 +43,8 @@ export default function Food({ food }) {
   const handleExpandClick = () => {
     setExpanded(!expanded);
   }
-  const [likeInfos, likeFormAction] = useFormState(likeFood, { likes: food.likes.length, isLiked: food.userRelations.isLiked })
-  const [saveInfos, saveFormAction] = useFormState(saveFood, { isSaved: food.userRelations.isSaved })
+  const [likeInfos, likeFormAction] = useFormState(likeFood, { likes: food.likes.length, isLiked: food.userRelations?.isLiked })
+  const [saveInfos, saveFormAction] = useFormState(saveFood, { isSaved: food.userRelations?.isSaved })
   console.log("userRelations")
   console.log(food.userRelations)
 
