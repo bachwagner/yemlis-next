@@ -1,7 +1,8 @@
-import connectDB from "@/app/lib/mongodb"
+/* import connectDB from "@/app/lib/mongodb"
 import User from "@/models/user/user"
 import { auth } from "@/auth"
 import FoodGroups from "@/models/groups/foodGroups"
+import { currentRole } from "../auth"
 
 export const createFoodGroup = async ({ name, foodId, parent }) => {
     try {
@@ -48,4 +49,4 @@ export const updateFoodGroup = async ({ name, foodId, parent }) => {
         console.log(error)
         return null
     }
-}
+} */

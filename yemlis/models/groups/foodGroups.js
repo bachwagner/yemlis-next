@@ -5,8 +5,14 @@ import creationInfos from './schemas.js'
 const foodGroups = new mongoose.Schema({
     name: {
         type: String,
+        required:true,
         minLength: [1, 'too short food group name'],
         maxLength: [80, 'too long food group name']
+    },
+    text: {
+        type: String,
+        minLength: [1, 'too short food group text'],
+        maxLength: [255, 'too long food group text']
     },
     foodId: {
         type: Number,
@@ -19,6 +25,7 @@ const foodGroups = new mongoose.Schema({
     },
     tags: {
         type: [String],
+        required:true,
         maxLength: [30, "too many foodGroups tags"]
     },
     children: [{ type: mongoose.Schema.Types.ObjectId, ref: 'foodGroups' }],

@@ -7,22 +7,26 @@ import { styled } from '@mui/material/styles';
 import { getFoodGroups, updateFoodGroups } from "@/utils/foodgroups"
 import { Typography } from '@mui/material';
 
-async function Read() {
+const Read = async () => {
   // const updateFG = await updateFoodGroups()
   const foodGroups = await getFoodGroups()
-  var idsToElements = {};
+  console.log("readd")
+
+  var idsToElements = {}
   for (var i = 0; i < foodGroups.length; i++) {
     idsToElements[foodGroups[i].foodId] = foodGroups[i];
   }
   var topLevel = [];
   for (var i = 0; i < foodGroups.length; i++) {
+   
     if (foodGroups[i].parent) {
       var parentElement = idsToElements[foodGroups[i].parent.foodId];
+    
       if (!parentElement) {
         // Parent element missing in list; treat as top-level
         topLevel.push(foodGroups[i]);
 
-      } else {
+      } else { 
         if (!parentElement.chd) {
           parentElement.chd = [];
         }
@@ -33,8 +37,7 @@ async function Read() {
       topLevel.push(foodGroups[i]);
     }
   }
-  const Traverse = ({list}) => {
-
+  const Traverse = ({ list }) => {
     return (<>
       <ul>
         {
@@ -51,11 +54,10 @@ async function Read() {
 
       </ul ></>
     )
-  
+
   }
-  console.log("topLeveltopLevel")
   // console.log(topLevel)
- 
+
   return (<>
     <Typography sx={{ mb: 1 }} textAlign="center" variant="h1" fontSize={24} fontWeight="bold">Food Groups</Typography>
     <Box sx={{ width: '100%' }}>

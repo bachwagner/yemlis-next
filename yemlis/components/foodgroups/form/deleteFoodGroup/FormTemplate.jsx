@@ -19,7 +19,7 @@ function FormTemplate({
     const [isPending, startTransition] = useTransition()
     const [serverStatus, setServerStatus] = useState(false)
     const { update } = useSession()
-  
+    
     const {
         register,
         control,
@@ -28,6 +28,7 @@ function FormTemplate({
         resetField,
         reset,
         watch,
+        getValues,
         formState: { isValid, errors, isDirty, dirtyFields } } = useForm({
             mode: "all",
             defaultValues: defaultValues,
@@ -66,7 +67,6 @@ function FormTemplate({
 
     return (
         <>
-
             <form
                 ref={formRef}
                 action={actionFunc}
@@ -109,6 +109,8 @@ function FormTemplate({
                     serverStatus={serverStatus}
                     register={register}
                     resetField={resetField}
+                    control={control}
+                    getValues={getValues}
                 />
             </form>
         </>

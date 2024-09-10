@@ -25,9 +25,6 @@ export async function GET(req) {
                 model: "FoodGroups",
             })
 
-        console.log("route handler-search foodgroups")
-        console.log(foodgroups)
-
         if (foodgroups.length === 0 || !foodgroups) {
             return NextResponse.json(
                 JSON.parse(JSON.stringify({ notFound: true, message: "Aranan Besin Bulunamadı" }))

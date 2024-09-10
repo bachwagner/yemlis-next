@@ -3,26 +3,27 @@ import React, { useState, useTransition, useEffect, useRef, useMemo } from 'reac
 
 import Box from '@mui/material/Box';
 
-import FormTemplate from './form/FormTemplate';
-import { foodGroup as foodGroupValidation } from '@/app/lib/validationSchemas'
-import { foodGroup as foodGroupAction } from "@/app/lib/actions/foodGroups"
+import FormTemplate from './FormTemplate';
+import { deleteFoodGroup as deleteFoodGroupValidation } from '@/app/lib/validationSchemas'
+import { deleteFoodGroup as foodGroupAction } from "@/app/lib/actions/foodGroups"
 
-export default function CreateFoodGroupForm({ foodGroups }) {
+export default function DeleteFoodGroupForm({ foodGroups }) {
     // const [state, formAction] = useFormState(authRegister, null);
     const defaultValues = {
-
+        name: null
     }
     /*  useEffect(() => {
          console.log("user s")
          console.log(user)
      }, [user]) */
+
     return (
 
         foodGroups ? <Box key="foodGroup" name="foodGroup" display="flex" alignItems="center" justifyContent="center" flexDirection="column" >
             <FormTemplate
                 foodGroups={foodGroups}
-                formName="create-food-group"
-                validation={foodGroupValidation}
+                formName="delete-food-group"
+                validation={deleteFoodGroupValidation}
                 defaultValues={defaultValues}
                 actionFunc={foodGroupAction}
                 children

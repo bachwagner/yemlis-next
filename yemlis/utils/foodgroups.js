@@ -21,8 +21,7 @@ export const getFoodGroups = cache(async () => {
 
         const foodGroups = await FoodGroups.find()
             .populate({ path: "parent", model: FoodGroups })
-        console.log("foodGroupss")
-        console.log(foodGroups.length)
+          
         return JSON.parse(JSON.stringify(foodGroups))
 
 
@@ -43,7 +42,7 @@ export const getFoodGroup = cache(async (name) => {
         const foodGroup = await FoodGroups.findOne({ name: name })
             .populate({ path: "parent", model: FoodGroups })
         console.log("foodGroup")
-        console.log(foodGroup)
+       // console.log(foodGroup)
         return JSON.parse(JSON.stringify(foodGroup))
 
     } catch (err) {

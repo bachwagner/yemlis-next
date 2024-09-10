@@ -11,6 +11,8 @@ function FormContent({
     errors,
     serverStatus,
     register,
+    control,
+    getValues
 }) {
 
     return (
@@ -25,6 +27,8 @@ function FormContent({
                 foodGroups={foodGroups}
                 errors={errors}
                 register={register}
+                control={control}
+                getValues={getValues}
             />
         </FormFrame>);
 }

@@ -3,9 +3,9 @@
 import React, { startTransition, Suspense, useState, useEffect, useTransition } from "react"
 import { Box, Button, CircularProgress, Typography } from "@mui/material"
 import { useCurrentUser } from "@/hooks/use-current-user"
-import CreateFoodGroupForm from "@/components/foodgroups/form/createFoodGroup/CreateFoodGroupForm"
+import DeleteFoodGroupForm from "@/components/foodgroups/form/deleteFoodGroup/DeleteFoodGroupForm"
 
-const CreateFoodGroup = () => {
+const DeleteFoodGroup = () => {
     const { user } = useCurrentUser()
     const [foodGroups, setFoodGroups] = useState([])
     const [isLoading, setIsLoading] = useState(true)
@@ -28,18 +28,18 @@ const CreateFoodGroup = () => {
                 setIsLoading(false)
                 setIsError(true)
             })
-    }, [])
+    }, []) 
 
     return (
         <Box boxShadow={1} display="flex" flexDirection="column" justifyContent="center" alignItems="center">
             {/* {status === "loading" ? <>Loading...</> : <> */}
             {/*{JSON.stringify(session)} */}
-            <Typography variant="body1" fontSize={24}>🔨 Create Food Group</Typography>
+            <Typography variant="body1" fontSize={24}>🗑 Delete Food Group</Typography>
             {isLoading && <div>Loading Food Groups...</div>}
             {isError && <div>Error</div>}
-            {foodGroups && <CreateFoodGroupForm foodGroups={foodGroups} />}
+            {foodGroups && <DeleteFoodGroupForm foodGroups={foodGroups} />}
         </Box >
     )
 }
 
-export default CreateFoodGroup
+export default DeleteFoodGroup
