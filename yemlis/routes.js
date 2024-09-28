@@ -5,14 +5,16 @@ export const publicRoutes = [
     "/auth/resetpassword",
     "/auth/reset-password",
     "/auth/new-password",
-   
-
 ]
+
 export const authRoutes = [
     "/auth/login",
     "/auth/register",
     "/auth/error"
-
+]
+export const protectedRoutes = [
+    "/foodgroupscontrol",
+    "/itemscontrol"
 ]
 
 export const apiAuthPrefix = "/api/auth"

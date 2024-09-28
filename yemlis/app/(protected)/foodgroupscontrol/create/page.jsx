@@ -10,6 +10,7 @@ const CreateFoodGroup = () => {
     const [foodGroups, setFoodGroups] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const [isError, setIsError] = useState(false)
+
     console.log("session user")
     console.log({ user })
 

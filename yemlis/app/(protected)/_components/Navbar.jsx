@@ -17,9 +17,8 @@ export const Navbar = () => {
                 color: "text.primary"
             }}>
             <nav>
-                Navbar Component
                 <Box display="inline-flex" alignItems="center" justifyContent="center">
-                    <Button
+                  {/*   <Button
                         href="/server"
                         LinkComponent={Link}
                         sx={{m:1}}
@@ -34,7 +33,7 @@ export const Navbar = () => {
                         variant={
                             pathname === "/client" ? "outlined" : "contained"}>
                         Client
-                    </Button>
+                    </Button>*/}
                     <Button
                         href="/admin"
                         LinkComponent={Link}
@@ -42,7 +41,31 @@ export const Navbar = () => {
                         variant={
                             pathname === "/admin" ? "outlined" : "contained"}>
                         Admin
-                    </Button>
+                    </Button> 
+                    <Button
+                        href="/foodgroupscontrol"
+                        LinkComponent={Link}
+                        sx={{m:1}}
+                        variant={
+                            pathname === "/foodgroupscontrol" ? "outlined" : "contained"}>
+                        Food Groups
+                    </Button> 
+                    <Button
+                        href="/itemscontrol"
+                        LinkComponent={Link}
+                        sx={{m:1}}
+                        variant={
+                            pathname === "/itemscontrol" ? "outlined" : "contained"}>
+                        Items
+                    </Button> 
+                    <Button
+                        href="/unitscontrol"
+                        LinkComponent={Link}
+                        sx={{m:1}}
+                        variant={
+                            pathname === "/unitscontrol" ? "outlined" : "contained"}>
+                        Units
+                    </Button> 
                     <Button
                         href="/settings"
                         LinkComponent={Link}

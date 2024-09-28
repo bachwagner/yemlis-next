@@ -1,12 +1,15 @@
 //import { auth } from "@/auth"
 import authConfig from "./auth.config"
 import NextAuth from "next-auth"
+import rateLimitMiddleware from "./middlewares/rateLimiter"
 import {
     DEFAULT_LOGIN_REDIRECT_URL,
     apiAuthPrefix,
     authRoutes,
-    publicRoutes
+    publicRoutes,
+    protectedRoutes,
 } from "@/routes"
+import { NextResponse } from "next/server"
 
 const { auth } = NextAuth(authConfig)
 
@@ -14,14 +17,20 @@ const { auth } = NextAuth(authConfig)
 export const config = {
     matcher: ['/((?!.*\\..*|_next).*)', '/', '/(api|trpc)(.*)'],
 }
-export default auth(async function middleware(req) {
+export default  auth(
+    rateLimitMiddleware(async function middleware(req) {
     const { nextUrl } = req
     const isLoggedIn = !!req.auth
     const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix)
     const isPublicRoute = publicRoutes.includes(nextUrl.pathname)
     const isAuthRoute = authRoutes.includes(nextUrl.pathname)
-
-    if (isApiAuthRoute) {
+    const isProtected= protectedRoutes.includes(nextUrl.pathname)
+    
+/*     return Response.json(
+        { success: false, message: 'Too Many Request ' },
+        { status: 429 }
+      )    */
+    if (isApiAuthRoute) { 
         console.log("api route returning null ")
         return null
     }
@@ -62,11 +71,15 @@ export default auth(async function middleware(req) {
                 `/auth/login?callbackUrl=${encodedCallbackUrl}`,
                 nextUrl
             ))
-
     }
-    if(isPublicRoute) console.log("public: ", nextUrl)
-    console.log("route returning null ")
+    if(isPublicRoute) {
+        console.log("public: ", nextUrl)
+    console.log("route returning null")
 
     return null
-
-})
+} 
+if(protectedRoutes && isLoggedIn) {
+    console.log("welcome")
+}
+//belki geri kalanlar için redirect eklenebilir
+}))

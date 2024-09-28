@@ -5,7 +5,7 @@ import OldAndNewPassword from '@/components/user/userBasicSettings/InputPairs/Ol
 import { Autocomplete, Box, Checkbox, Chip, FormControl, FormControlLabel, FormHelperText, TextField, Typography } from '@mui/material'
 import { Controller } from 'react-hook-form'
 
-function FoodGroupCreateInputs(/* {
+function FoodGroupUpdateInputs(/* {
     user,
     errors,
     register,
@@ -98,7 +98,7 @@ function FoodGroupCreateInputs(/* {
                         id="foodgroups-tags"
                         options={["katkı maddeler", "süt", "fruktoz"]}
                         freeSolo
-                        sx={{ width: 300 }}
+                        sx={{ width: 300, mb:1 }}
                         value={value || null}
                         onChange={(e, data) => { onChange(data) }}
                         {...props}
@@ -132,4 +132,4 @@ function FoodGroupCreateInputs(/* {
     )
 }
 
-export default FoodGroupCreateInputs
+export default FoodGroupUpdateInputs

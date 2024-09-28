@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
 import FormFrame from './FormFrame';
 import FormContent from './FormContent';
+import { useRouter } from 'next/navigation'
 
 function FormTemplate({
     foodGroups,
@@ -19,7 +20,8 @@ function FormTemplate({
     const [isPending, startTransition] = useTransition()
     const [serverStatus, setServerStatus] = useState(false)
     const { update } = useSession()
-    
+    const router = useRouter()
+
     const {
         register,
         control,
@@ -83,6 +85,7 @@ function FormTemplate({
 
                                     if (data.success) {
                                         update() // TO CHECK
+                                        router.push('/foodgroupscontrol/read')
                                     }
                                     reset()
                                 }).catch((error) => {

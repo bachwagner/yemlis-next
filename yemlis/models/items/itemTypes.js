@@ -32,8 +32,9 @@ const itemTypes = new mongoose.Schema({
 }
 )
 
-export default mongoose.model("ItemTypes", itemTypes);
 
+const ItemTypes = mongoose.models?.ItemTypes || mongoose.model("ItemTypes", itemTypes)
+export default ItemTypes
 /*  const addITs = await addItemTypes([{
         name: "Protein",
         info: "Common Protein ",

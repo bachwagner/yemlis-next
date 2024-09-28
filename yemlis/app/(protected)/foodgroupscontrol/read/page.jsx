@@ -43,7 +43,7 @@ const Read = async () => {
         {
           list.map((l, i) => {
             return (
-              <><li>
+              <><li key={l.name}>
                 {l.name}
               </li>
                 {l.chd && <Traverse list={l.chd} />}

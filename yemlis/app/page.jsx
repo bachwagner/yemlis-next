@@ -7,6 +7,8 @@ import { getFoods } from "@/utils/food";
 import FoodList from "@/components/food/FoodList";
 import Search from "@/components/food/Search";
 import { test } from "./lib/actions/test";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import GlobalError from "./global-error";
 const label = { inputProps: { "aria-label": "Switch demo" } };
 
 const INITIAL_NUMBER_OF_FOODS = 10
@@ -20,6 +22,7 @@ export default async function Home({ searchParams }) {
     /*  console.log("foodss")
      console.log(initialFoods) */
     return (
+        <ErrorBoundary fallback={<GlobalError/>}>
         <Box sx={{ flexGrow: 1 }} >
 
             <Grid container spacing={1}>
@@ -48,6 +51,7 @@ export default async function Home({ searchParams }) {
                 </Grid>
 
                 <Suspense fallback={<>Besin Yükleniyor</>}>
+           
                     <div style={{display:"contents"}}  key={Math.random(6)} >
                         <FoodList search={search} initialFoods={JSON.parse(JSON.stringify(initialFoods))} />
                     </div>
@@ -63,6 +67,7 @@ export default async function Home({ searchParams }) {
             </Grid >
 
         </Box >
+        </ErrorBoundary>
     );
 }
 

@@ -1,12 +1,18 @@
 "use server"
 
 import { foodGroup as foodGroupValidation } from "@/app/lib/validationSchemas"
+import { updateFoodGroup as updateFoodGroupValidation } from "@/app/lib/validationSchemas"
 import { deleteFoodGroup as deleteFoodGroupValidation } from "@/app/lib/validationSchemas"
+
 import User from "@/models/user/user"
 import { currentUser } from "../auth"
 import FoodGroups from "@/models/groups/foodGroups"
+import { revalidateTag } from 'next/cache'
+import Items from "@/models/items/items"
+import itemTypes from "@/models/items/itemTypes"
+
 export const createFoodGroup = async (values) => {
-    const validatedFoodGroup = await foodGroupValidation.validateAsync(values)
+    const validatedItem = await foodGroupValidation.validateAsync(values)
     if (!validatedFoodGroup) return { error: true, message: "Invalid Food Group Fields" }
 
     const user = await currentUser()
@@ -34,8 +40,41 @@ export const createFoodGroup = async (values) => {
     console.log("create")
     console.log(create)
     if (create.error) return { error: true, message: create.message }
+    revalidateTag('foodgroups')
 
     return { success: true, message: "Food Group Saved" }
+}
+export const updateFoodGroup = async (values) => {
+    console.log("Update Food Group")
+
+    const validatedFoodGroup = await updateFoodGroupValidation.validateAsync(values)
+    if (!validatedFoodGroup) return { error: true, message: "Invalid Update Food Group Fields" }
+
+    const user = await currentUser()
+    if (!user || user?.role !== "ADMIN") {
+        return { error: "Unauthorized" }
+    }
+    let updateObj = {
+        name: validatedFoodGroup.name,
+        text: validatedFoodGroup.text,
+        tags: validatedFoodGroup.tags,
+    }
+
+    const isNameExists = await FoodGroups.findOne({ name: validatedFoodGroup.name })
+    if (isNameExists) return { error: true, message: "Foodgroup is already exists" }
+    if (!validatedFoodGroup.noParent && validatedFoodGroup.parent) {
+        const checkParent = await FoodGroups.findOne({ name: validatedFoodGroup.parent })
+        if (!checkParent) return { error: true, message: "Parent could not be found" }
+        updateObj.parent = checkParent._id
+    } else {
+        updateObj.parent = null
+    }
+    const update = await FoodGroups.updateOne({ name: validatedFoodGroup.oldName }, updateObj)
+    if (!update) return { error: true, message: "Food Group Cannot Be Updated" }
+    if (update.error) return { error: true, message: update.message }
+    revalidateTag('foodgroups')
+    console.log("Food Group Updated")
+    return { success: true, message: "Food Group Updated" }
 }
 
 export const deleteFoodGroup = async (values) => {
@@ -49,7 +88,7 @@ export const deleteFoodGroup = async (values) => {
     if (!user || user?.role !== "ADMIN") {
         return { error: true, message: "Unauthorized" }
     }
-    const findFoodGroup = await FoodGroups.findOne({
+    const findItem = await FoodGroups.findOne({
         name: validatedFoodGroup.name
     }).populate({
         path: "parent",
@@ -92,6 +131,7 @@ export const deleteFoodGroup = async (values) => {
                 return { error: true, message: "Food Group Deleted But Children Could Not be Updated" }
             }
         }
+        revalidateTag('foodgroups')
 
         return { error: false, success: true, message: "Food Group Deleted Successfully" }
 
@@ -100,3 +140,4 @@ export const deleteFoodGroup = async (values) => {
     }
 
 }
+

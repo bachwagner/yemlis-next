@@ -161,12 +161,12 @@ export default function LoginForm() {
     useEffect(() => {
         console.log("useeffect")
 
-        if (serverStatus.success) {
+        if (serverStatus?.success) {
             console.log("serverStatus.success")
             console.log(serverStatus.success)
             window.location.replace(serverStatus?.callbackUrl || "/")
         }
-    }, [serverStatus.success])
+    }, [serverStatus?.success])
 
     const formRef = useRef(null)
 

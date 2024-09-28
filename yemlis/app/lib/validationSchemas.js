@@ -60,6 +60,8 @@ export const register = Joi.object({
     acceptterms: Joi.boolean().invalid(false)
 }).with("password", "repeatpassword")
 
+//FOODGROUPS//
+
 export const foodGroup = Joi.object({
     name: Joi.string().min(2).max(120).pattern(/^([a-zA-ZğüşöçıİĞÜŞÖÇ]+\s)*[a-zA-ZğüşöçıİĞÜŞÖÇ]+$/
     )
@@ -102,6 +104,51 @@ export const foodGroup = Joi.object({
     noParent: Joi.boolean()
 })
 
+export const updateFoodGroup = Joi.object({
+    oldName: Joi.string().min(2).max(120).pattern(/^([a-zA-ZğüşöçıİĞÜŞÖÇ]+\s)*[a-zA-ZğüşöçıİĞÜŞÖÇ]+$/
+    )
+        .messages({
+            'string.base': 'Geçersiz Değiştirilecek Besin Grubu İsmi',
+            'string.pattern.base': 'Özel karakter içeremez',
+            'string.min': 'Besin Grubu en az 2 karakter içermeli',
+            'string.max': 'Besin Grubu en fazla 255 karakter içermeli',
+            'string.empty': 'Eski Besin Grubu alanı gerekli',
+        }),
+    name: Joi.string().min(2).max(120).pattern(/^([a-zA-ZğüşöçıİĞÜŞÖÇ]+\s)*[a-zA-ZğüşöçıİĞÜŞÖÇ]+$/
+    )
+        .messages({
+            'string.base': 'Geçersiz Besin Grubu İsmi',
+            'string.pattern.base': 'Özel karakter içeremez',
+            'string.min': 'Besin Grubu en az 2 karakter içermeli',
+            'string.max': 'Besin Grubu en fazla 255 karakter içermeli',
+            'string.empty': 'Besinn Grubu alanı gerekli',
+        }),
+    parent: Joi.string().min(2).max(120).pattern(/^([a-zA-ZğüşöçıİĞÜŞÖÇ]+\s)*[a-zA-ZğüşöçıİĞÜŞÖÇ]+$/)
+        .messages({
+            'string.base': 'Geçersiz Besin Grubu Parenti İsmi',
+            'string.pattern.base': 'Besin Grubu Parenti  özel karakter içeremez',
+            'string.min': 'Besin Grubu Parenti en az 2 karakter içermeli',
+            'string.max': 'Besin Grubu Parenti en fazla 255 karakter içermeli',
+            'string.empty': 'Besin Grubu Parenti alanı gerekli',
+        }).allow(null),
+    text: Joi.string().min(2).max(255).pattern(/^[a-zA-ZğüşöçıİĞÜŞÖÇ]+$/).messages({
+        'string.base': 'Geçersiz Besin Grubu İsmi',
+        'string.pattern.base': 'Harf ve özel karakter içeremez',
+        'string.min': 'Besin Grubu en az 2 karakter içermeli',
+        'string.max': 'Besin Grubu en fazla 255 karakter içermeli',
+        'string.empty': 'Besin Grubu alanı gerekli',
+    }),
+    tags: Joi.array().min(1).max(5).items(Joi.string().min(2).max(20)).messages({
+        'array.base': 'Geçersiz Besin Etiketi Formatı',
+        'array.pattern.base': 'Özel karakter içeremez',
+        'array.min': 'Besin Grubu Etiketi en az 2 etiket içermeli',
+        'array.max': 'Besin Grubu Etiketi en fazla 5 etiket içermeli',
+        'string.max': 'Besin Grubu Etiketi en fazla 20 karakter içermeli',
+        'array.empty': 'Besin Grubu Etiketi alanı gerekli',
+    }),
+    noParent: Joi.boolean()
+})
+
 export const deleteFoodGroup = Joi.object({
     name: Joi.string().min(2).max(120).pattern(/^([a-zA-ZğüşöçıİĞÜŞÖÇ]+\s)*[a-zA-ZğüşöçıİĞÜŞÖÇ]+$/
     )
@@ -112,8 +159,117 @@ export const deleteFoodGroup = Joi.object({
             'string.max': 'Besin Grubu en fazla 255 karakter içermeli',
             'string.empty': 'Besin Grubu alanı gerekli',
         })
-  
+
 })
+
+//ITEMS//
+export const item = Joi.object({
+    name: Joi.string().min(2).max(50).required().pattern(/^([a-zA-ZğüşöçıİĞÜŞÖÇ,]+\s)*[a-zA-ZğüşöçıİĞÜŞÖÇ]+$/)
+        .messages({
+            'string.base': 'Geçersiz Besin Öğesi İsmi',
+            'string.pattern.base': 'Özel karakter içeremez',
+            'string.min': 'Besin Grubu en az 2 karakter içermeli',
+            'string.max': 'Besin Grubu en fazla 50 karakter içermeli',
+            'string.empty': 'Besin Öğesi alanı gerekli',
+        }),
+    usdaName: Joi.string().min(2).max(50).pattern(/^([a-zA-Z]+\s)*[a-zA-Z]+$/
+    )
+        .messages({
+            'string.base': 'Geçersiz Besin Öğesi Usda İsmi',
+            'string.pattern.base': 'Özel karakter içeremez',
+            'string.min': 'Usda İsmi en az 2 karakter içermeli',
+            'string.max': 'Usda İsmi en fazla 50 karakter içermeli',
+        }),
+    formula: Joi.string().min(2).max(50).pattern(/^([a-zA-Z0-9]+\s)*[a-zA-Z0-9]+$/
+    )
+        .messages({
+            'string.base': 'Geçersiz Besin Öğesi Formülü',
+            'string.pattern.base': 'Özel karakter içeremez',
+            'string.min': 'Besin Grubu Formülü en az 2 karakter içermeli',
+            'string.max': 'Besin Grubu Formülü en fazla 50 karakter içermeli',
+        }),
+    info: Joi.string().min(1).max(200).pattern(/^([a-zA-ZğüşöçıİĞÜŞÖÇ]+\s)*[a-zA-ZğüşöçıİĞÜŞÖÇ]+$/)
+        .messages({
+            'string.base': 'Geçersiz Besin Öğesi açıklaması',
+            'string.pattern.base': 'Özel karakter içeremez',
+            'string.min': 'Besin Öğesi açıklaması en az 2 karakter içermeli',
+            'string.max': 'Besin Öğesi açıklaması  en fazla 50 karakter içermeli',
+        }),
+    itemType: Joi.string().min(2).max(50).required().pattern(/^([a-zA-ZğüşöçıİĞÜŞÖÇ]+\s)*[a-zA-ZğüşöçıİĞÜŞÖÇ]+$/)
+        .messages({
+            'string.base': 'Geçersiz Besin Öğesi Türü İsmi',
+            'string.pattern.base': 'Özel karakter içeremez',
+            'string.min': 'Besin Öğesi Türü en az 2 karakter içermeli',
+            'string.max': 'Besin Öğesi Türü en fazla 50 karakter içermeli',
+            'string.empty': 'Besin Öğesi Türü alanı gerekli',
+        }),
+})
+
+export const updateItem = Joi.object({
+    name: Joi.string().min(2).max(50).pattern(/^([a-zA-ZğüşöçıİĞÜŞÖÇ,]+\s)*[a-zA-ZğüşöçıİĞÜŞÖÇ]+$/)
+        .messages({
+            'string.base': 'Geçersiz Item İsmi',
+            'string.pattern.base': 'Özel karakter içeremez',
+            'string.min': 'Item en az 2 karakter içermeli',
+            'string.max': 'Item en fazla 50 karakter içermeli',
+            'string.empty': 'Item alanı gerekli',
+        }),
+    oldName: Joi.string().min(2).max(50).required().pattern(/^([a-zA-ZğüşöçıİĞÜŞÖÇ,]+\s)*[a-zA-ZğüşöçıİĞÜŞÖÇ]+$/)
+        .messages({
+            'string.base': 'Geçersiz Eski Item Grubu İsmi',
+            'string.pattern.base': 'Özel karakter içeremez',
+            'string.min': 'Eski Item en az 2 karakter içermeli',
+            'string.max': 'Eski Item en fazla 50 karakter içermeli',
+            'string.empty': 'Eski Item alanı gerekli',
+        }),
+    usdaName: Joi.string().min(2).max(50).pattern(/^([a-zA-Z]+\s)*[a-zA-Z]+$/
+    )
+        .messages({
+            'string.base': 'Geçersiz Item Usda İsmi',
+            'string.pattern.base': 'Özel karakter içeremez',
+            'string.min': 'USDA ismi en az 2 karakter içermeli',
+            'string.max': 'USDA ismi en fazla 50 karakter içermeli',
+        }),
+    formula: Joi.string().min(1).max(50).pattern(/^([a-zA-Z0-9]+\s)*[a-zA-Z0-9]+$/
+    )
+        .messages({
+            'string.base': 'Geçersiz Item Formülü',
+            'string.pattern.base': 'Özel karakter içeremez',
+            'string.min': 'Item Formülü en az 2 karakter içermeli',
+            'string.max': 'Item Formülü en fazla 50 karakter içermeli',
+        }),
+    info: Joi.string().min(1).max(200).pattern(/^([a-zA-ZğüşöçıİĞÜŞÖÇ]+\s)*[a-zA-ZğüşöçıİĞÜŞÖÇ]+$/)
+        .messages({
+            'string.base': 'Geçersiz Item açıklaması',
+            'string.pattern.base': 'Özel karakter içeremez',
+            'string.min': 'Item açıklaması en az 2 karakter içermeli',
+            'string.max': 'Item açıklaması  en fazla 50 karakter içermeli',
+        }),
+    itemType: Joi.string().min(2).max(50).pattern(/^([a-zA-ZğüşöçıİĞÜŞÖÇ]+\s)*[a-zA-ZğüşöçıİĞÜŞÖÇ]+$/)
+        .messages({
+            'string.base': 'Geçersiz ItemType İsmi',
+            'string.pattern.base': 'Özel karakter içeremez',
+            'string.min': 'ItemType en az 2 karakter içermeli',
+            'string.max': 'ItemType en fazla 50 karakter içermeli',
+            'string.empty': 'ItemType alanı gerekli',
+        }),
+})
+
+export const deleteItem = Joi.object({
+    name: Joi.string().min(2).max(50).required().pattern(/^([a-zA-ZğüşöçıİĞÜŞÖÇ]+\s)*[a-zA-ZğüşöçıİĞÜŞÖÇ]+$/)
+        .messages({
+            'string.base': 'Geçersiz Item Grubu İsmi',
+            'string.pattern.base': 'Özel karakter içeremez',
+            'string.min': 'Besin Grubu en az 2 karakter içermeli',
+            'string.max': 'Besin Grubu en fazla 50 karakter içermeli',
+            'string.empty': 'Item alanı gerekli',
+        })
+
+})
+
+
+
+
 /* .equal(Joi.ref('password'))
     .required()
     .label('Confirm password')

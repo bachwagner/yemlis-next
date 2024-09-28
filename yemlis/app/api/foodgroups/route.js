@@ -15,9 +15,9 @@ export async function GET(req) {
         }
         //  const session = await auth()
         const { searchParams } = new URL(req.url)
-        const name = searchParams.get('name')
-        console.log("search params foodgroups")
-        console.log(name)
+        /* const name = searchParams.get('name')
+           console.log("search params foodgroups")
+           console.log(name) */
         await connectDB()
         const foodgroups = await FoodGroups.find()
             .populate({
