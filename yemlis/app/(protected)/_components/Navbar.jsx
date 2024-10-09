@@ -67,6 +67,14 @@ export const Navbar = () => {
                         Units
                     </Button> 
                     <Button
+                        href="/unitseqscontrol"
+                        LinkComponent={Link}
+                        sx={{m:1}}
+                        variant={
+                            pathname === "/unitseqscontrol" ? "outlined" : "contained"}>
+                        Unit Equivalents
+                    </Button> 
+                    <Button
                         href="/settings"
                         LinkComponent={Link}
                         sx={{m:1}}

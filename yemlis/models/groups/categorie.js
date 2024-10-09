@@ -133,6 +133,5 @@ categorie.query.getChildren = async function (name, limit, pure) {
     return similars
 }; */
 
-
-
-export default models?.Categorie || mongoose.model("Categorie", categorie)
+const Categorie = mongoose.models?.Categorie || mongoose.model("Categorie", categorie)
+export default Categorie

@@ -3,11 +3,11 @@
 import React, { startTransition, Suspense, useState, useEffect, useTransition } from "react"
 import { Box, Button, CircularProgress, Typography } from "@mui/material"
 import { useCurrentUser } from "@/hooks/use-current-user"
-import DeleteFoodGroupForm from "@/components/foodgroups/form/deleteFoodGroup/DeleteFoodGroupForm"
+import DeleteItemForm from "@/components/items/form/deleteItem/DeleteItemForm"
 
 const DeleteFoodGroup = () => {
     const { user } = useCurrentUser()
-    const [foodGroups, setFoodGroups] = useState([])
+    const [items, setItems] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const [isError, setIsError] = useState(false)
     console.log("session user")
@@ -15,15 +15,15 @@ const DeleteFoodGroup = () => {
 
     useEffect(() => {
         console.log("Use Effect")
-        fetch(`/api/foodgroups`, { next: { revalidate:100 } }) //TODO
+        fetch(`/api/items`, { next: { revalidate:100 } }) //TODO
             .then((res) => res.json())
             .then((data) => {
-                console.log("foodgroups data")
+                console.log("items data")
                 console.log(data)
-                setFoodGroups([...data])
+                setItems([...data])
                 setIsLoading(false)
             }).catch((err) => {
-                console.log("foodgroups data catch")
+                console.log("items data catch")
                 console.log(err)
                 setIsLoading(false)
                 setIsError(true)
@@ -34,10 +34,10 @@ const DeleteFoodGroup = () => {
         <Box boxShadow={1} display="flex" flexDirection="column" justifyContent="center" alignItems="center">
             {/* {status === "loading" ? <>Loading...</> : <> */}
             {/*{JSON.stringify(session)} */}
-            <Typography variant="body1" fontSize={24}>🗑 Delete Food Group</Typography>
-            {isLoading && <div>Loading Food Groups...</div>}
+            <Typography variant="body1" fontSize={24}>🗑 Delete Nutrient</Typography>
+            {isLoading && <div>Loading Nutrient...</div>}
             {isError && <div>Error</div>}
-            {foodGroups && <DeleteFoodGroupForm foodGroups={foodGroups} />}
+            {items && <DeleteItemForm items={items} />}
         </Box >
     )
 }

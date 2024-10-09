@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useEffect, useTransition } from "react"
-import { Box, Typography } from "@mui/material"
+import { Box, LinearProgress, Typography } from "@mui/material"
 import { useCurrentUser } from "@/hooks/use-current-user"
 import UpdateItemForm from "@/components/items/form/updateItem/UpdateItemForm"
 
@@ -9,6 +9,8 @@ const UpdateItem = () => {
     const { user } = useCurrentUser()
     const [itemTypes, setItemTypes] = useState([])
     const [items, setItems] = useState([])
+    const [units, setUnits] = useState([])
+    const [unitEquivalents, setUnitEquivalents] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const [isError, setIsError] = useState(false)
 
@@ -17,31 +19,29 @@ const UpdateItem = () => {
 
     useEffect(() => {
         console.log("Use Effect")
-        fetch(`/api/itemtypes`, { next: { revalidate: 1200 } }) //TODO
-            .then((res) => res.json())
-            .then((data) => {
-                console.log("items types data")
-                console.log(data)
-                setItemTypes([...data])
+        Promise.all([
+            fetch('/api/items'),
+            fetch('/api/itemtypes'),
+            fetch('/api/units'),
+            fetch('/api/unitequivalents'),
+        ])
+            .then(([resItems,resItemTypes, resUnits, resUnitEquivalents]) =>
+                Promise.all([resItems.json(), resItemTypes.json(), resUnits.json(), resUnitEquivalents.json()])
+            )
+            .then(([dataItems, dataItemTypes, dataUnits, dataUnitEquivalents]) => {
+                setItems(dataItems)
+                setItemTypes(dataItemTypes)
+                setUnits(dataUnits)
+                setUnitEquivalents(dataUnitEquivalents)
                 setIsLoading(false)
-            }).catch((err) => {
-                console.log("items types data catch")
-                console.log(err)
-                setIsLoading(false)
-                setIsError(true)
-            })
-        fetch(`/api/items`, { next: { revalidate: 1200 } }) //TODO
-            .then((res) => res.json())
-            .then((data) => {
-                console.log("items data")
-                console.log(data)
-                setItems([...data])
-                setIsLoading(false)
+                console.log("items, itemTypes, units, unitEquivalents")
+                console.log(dataItems, dataItemTypes, dataUnits, dataUnitEquivalents)
             }).catch((err) => {
                 console.log("items data catch")
                 console.log(err)
                 setIsLoading(false)
                 setIsError(true)
+
             })
     }, [])
 
@@ -50,13 +50,18 @@ const UpdateItem = () => {
             {/* {status === "loading" ? <>Loading...</> : <> */}
             {/*{JSON.stringify(session)} */}
             <Typography variant="body1" fontSize={24}>🔧 Update Item</Typography>
-            {isLoading && <div>Loading Item Types Groups...</div>}
+            {isLoading &&
+                <Box sx={{ width: '100%' }}>
+                    <LinearProgress sx={{ height: 8 }} color="primary" />
+                </Box>}
             {isError && <div>Error</div>}
-            {itemTypes &&
-                <UpdateItemForm
-                    itemTypes={itemTypes}
-                    items={items}
-                />}
+            {(items && itemTypes && units && unitEquivalents && !isLoading) && <UpdateItemForm
+                items={items}
+                itemTypes={itemTypes}
+                units={units}
+                unitEquivalents={unitEquivalents}
+
+            />}
         </Box >
     )
 }

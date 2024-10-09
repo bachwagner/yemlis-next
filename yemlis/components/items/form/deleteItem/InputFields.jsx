@@ -5,7 +5,7 @@ import OldAndNewPassword from '@/components/user/userBasicSettings/InputPairs/Ol
 import { Autocomplete, Box, Checkbox, Chip, FormControl, FormControlLabel, FormHelperText, TextField, Typography } from '@mui/material'
 import { Controller } from 'react-hook-form'
 
-function FoodGroupCreateInputs(/* {
+function ItemDeleteInputs(/* {
     user,
     errors,
     register,
@@ -13,7 +13,7 @@ function FoodGroupCreateInputs(/* {
 } */props) {
     const errors = props.errors
     const register = props.register
-    const foodGroups = props.foodGroups
+    const items = props.items
     const control = props.control
     const getValues = props.getValues
 
@@ -32,18 +32,18 @@ function FoodGroupCreateInputs(/* {
                 render={({ field: { onChange, value, ...props } }) => (
                     <Autocomplete
                         disablePortal
-                        name='foodgroupselect'
+                        name='itemselect'
                         size='small'
-                        id="select-delete-food-group"
-                        options={foodGroups.map(fg => fg.name)}
+                        id="select-delete-item"
+                        options={items.map(fg => fg.name)}
                         sx={{ width: 300 }}
                         value={value || null}
                         renderInput={(params) =>
                             <TextField
                                 {...params}
                                 label="Besin Grubu"
-                                error={errors.foodgroupselect ? true : false}
-                                helperText={errors.foodgroupselect && errors.foodgroupselect.message} />}
+                                error={errors.itemselect ? true : false}
+                                helperText={errors.itemselect && errors.itemselect.message} />}
                         onChange={(e, data) => { onChange(data) }}
                         {...props}
 
@@ -55,4 +55,4 @@ function FoodGroupCreateInputs(/* {
     )
 }
 
-export default FoodGroupCreateInputs
+export default ItemDeleteInputs

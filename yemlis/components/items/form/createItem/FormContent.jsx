@@ -5,13 +5,16 @@ import ItemCreateInputs from './InputFields';
 function FormContent({
     formName,
     itemTypes,
+    units,
+    unitEquivalents,
     isPending,
     isDirty,
     errors,
     serverStatus,
     register,
     control,
-    getValues
+    getValues,
+    watch
 }) {
 
     return (
@@ -23,11 +26,15 @@ function FormContent({
             serverStatus={serverStatus}
         >
             <ItemCreateInputs
+                isPending={isPending}
                 itemTypes={itemTypes}
+                units={units}
+                unitEquivalents={unitEquivalents}
                 errors={errors}
                 register={register}
                 control={control}
                 getValues={getValues}
+                watch={watch}
             />
         </FormFrame>);
 }

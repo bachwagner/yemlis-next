@@ -5,27 +5,25 @@ import Box from '@mui/material/Box';
 
 import FormTemplate from './FormTemplate';
 import { deleteFoodGroup as deleteFoodGroupValidation } from '@/app/lib/validationSchemas'
-import { deleteFoodGroup as foodGroupAction } from "@/app/lib/actions/foodGroups"
+import { deleteItem  as deleteItemAction } from '@/app/lib/actions/items';
 
-export default function DeleteFoodGroupForm({ foodGroups }) {
-    // const [state, formAction] = useFormState(authRegister, null);
+import { deleteItem as deleteItemValidation } from '@/app/lib/validationSchemas';
+
+export default function DeleteItemForm({ items }) {
+
     const defaultValues = {
         name: null
     }
-    /*  useEffect(() => {
-         console.log("user s")
-         console.log(user)
-     }, [user]) */
 
     return (
 
-        foodGroups ? <Box key="foodGroup" name="foodGroup" display="flex" alignItems="center" justifyContent="center" flexDirection="column" >
+        items ? <Box key="item" name="item" display="flex" alignItems="center" justifyContent="center" flexDirection="column" >
             <FormTemplate
-                foodGroups={foodGroups}
-                formName="delete-food-group"
-                validation={deleteFoodGroupValidation}
+                items={items}
+                formName="delete-item"
+                validation={deleteItemValidation}
                 defaultValues={defaultValues}
-                actionFunc={foodGroupAction}
+                actionFunc={deleteItemAction}
                 children
             />
         </Box> : <>Servere Ulaşılamadı</>

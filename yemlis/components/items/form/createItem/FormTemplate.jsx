@@ -15,7 +15,10 @@ function FormTemplate({
     validation,
     defaultValues,
     actionFunc,
+    units,
+    unitEquivalents,
     children
+
 }) {
     const [isPending, startTransition] = useTransition()
     const [serverStatus, setServerStatus] = useState(false)
@@ -94,6 +97,8 @@ function FormTemplate({
                 <FormContent
                     formName={formName}
                     itemTypes={itemTypes}
+                    units={units}
+                    unitEquivalents={unitEquivalents}
                     isPending={isPending}
                     isDirty={isDirty}
                     errors={errors}
@@ -102,6 +107,7 @@ function FormTemplate({
                     resetField={resetField}
                     control={control}
                     getValues={getValues}
+                    watch={watch}
                 />
             </form>
         </>

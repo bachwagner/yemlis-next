@@ -7,8 +7,6 @@ import { getItems } from '@/utils/items';
 const Read = async () => {
   // const updateFG = await updateFoodGroups()
   const items =  await getItems()
-  console.log("readd items")
-  console.log(items)
 
   const Traverse = ({ list }) => {
     return (<>

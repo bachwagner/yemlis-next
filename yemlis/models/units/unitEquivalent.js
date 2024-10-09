@@ -1,6 +1,7 @@
-import mongoose,{models} from 'mongoose'
+import mongoose from 'mongoose'
 import creationInfos from '../groups/schemas.js'
-const UnitEq = new mongoose.Schema({
+import Unit from './unit.js';
+/* const UnitEq = new mongoose.Schema({
     unit: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "unit"
@@ -11,8 +12,8 @@ const UnitEq = new mongoose.Schema({
         min: [-100000000000, "too low unit equals"],
         max: [100000000000, "to high unit equals"]
     } 
-})
-const UnitEquivalent = new mongoose.Schema({
+}) */
+const unitEquivalent = new mongoose.Schema({
     name: {
         type: String,
         minLength: [3, "Too Short 'unitEquivalent' name"],
@@ -24,15 +25,20 @@ const UnitEquivalent = new mongoose.Schema({
         ref: "unit",
         required: [false, "unitEquivalent's `mainUnit` is required"]
     },
-    units: [UnitEq],
+    units: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Unit",
+
+    }],
     creationInfos
 
 })
 
 
-UnitEquivalent.query.byName = async function (name) {
+unitEquivalent.query.byName = async function (name) {
     return await this.where({ name: new RegExp(name, 'i') });
 };
 
 
-export default  models?.UnitEquivalent || mongoose.model("UnitEquivalent", UnitEquivalent);
+const UnitEquivalent = mongoose.models?.UnitEquivalent || mongoose.model("UnitEquivalent", unitEquivalent)
+export default UnitEquivalent

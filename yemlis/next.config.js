@@ -21,6 +21,7 @@ export default nextConfig;
   } */
 
 module.exports = {
+//  reactStrictMode: false,
   logging: {
     fetches: {
       fullUrl: true,

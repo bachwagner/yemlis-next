@@ -5,6 +5,8 @@ import ItemUpdateInputs from './InputFields';
 function FormContent({
     items,
     itemTypes,
+    units,
+    unitEquivalents,
     formName,
     isPending,
     isDirty,
@@ -15,7 +17,9 @@ function FormContent({
     getValues,
     watch,
     reset,
-    setValue
+    setValue,
+    setError,
+    resetField
 }) {
 
     return (
@@ -29,6 +33,8 @@ function FormContent({
             <ItemUpdateInputs
                 items={items}
                 itemTypes={itemTypes}
+                units={units}
+                unitEquivalents={unitEquivalents}
                 errors={errors}
                 register={register}
                 control={control}
@@ -36,6 +42,10 @@ function FormContent({
                 watch={watch}
                 reset={reset}
                 setValue={setValue}
+                isPending={isPending}
+                setError={setError}
+                resetField={resetField}
+
             />
         </FormFrame>);
 }

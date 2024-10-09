@@ -1,11 +1,11 @@
 import React from 'react'
 import FormFrame from './FormFrame';
 import BasicSettings from './InputFields';
-import FoodGroupCreateInputs from './InputFields';
+import ItemDeleteInputs from './InputFields';
 
 function FormContent({
     formName,
-    foodGroups,
+    items,
     isPending,
     isDirty,
     errors,
@@ -23,8 +23,8 @@ function FormContent({
             errors={errors}
             serverStatus={serverStatus}
         >
-            <FoodGroupCreateInputs
-                foodGroups={foodGroups}
+            <ItemDeleteInputs
+                items={items}
                 errors={errors}
                 register={register}
                 control={control}

@@ -16,11 +16,13 @@ function FormTemplate({
     validation,
     defaultValues,
     actionFunc,
+    units,
+    unitEquivalents,
     children
 }) {
     const [isPending, startTransition] = useTransition()
     const [serverStatus, setServerStatus] = useState(false)
-    const { update } = useSession()
+    const { update: updateSession } = useSession() // to check
     const router = useRouter()
     console.log("df values")
     console.log(defaultValues)
@@ -33,26 +35,28 @@ function FormTemplate({
         reset,
         watch,
         getValues,
+        setError,
+        update,
         formState: { isValid, errors, isDirty, dirtyFields } } = useForm({
             mode: "all",
             defaultValues: defaultValues,
             resolver: joiResolver(validation/* , { language: 'de' } */)
         })
 
-  /*   useEffect(() => { //TO REMOVE? //TODO
-        console.log("getting use effect")
-        //  setValue("name",user.name)
-        reset({
-            name: foodGroup.name,
-            foodId:foodGroup.foodId,
-            parent: foodGroup.parent,
-            text:foodGroup.text
-        })
-    }, [foodGroup]) */
+    /*   useEffect(() => { //TO REMOVE? //TODO
+          console.log("getting use effect")
+          //  setValue("name",user.name)
+          reset({
+              name: foodGroup.name,
+              foodId:foodGroup.foodId,
+              parent: foodGroup.parent,
+              text:foodGroup.text
+          })
+      }, [foodGroup]) */
 
 
-            console.log("raw dirty")
-            console.log(dirtyFields)
+    console.log("raw dirty")
+    console.log(dirtyFields)
     const getDirtyFields = (dirtyFields, formValues) => {
         let dirtyFieldsValues = {}
         if (!dirtyFields || !formValues || typeof dirtyFields !== 'object' || typeof formValues !== 'object') return null
@@ -87,7 +91,7 @@ function FormTemplate({
                                 actionFunc(dfvalues).then((data) => {
                                     setServerStatus(data)
                                     if (data.success) {
-                                        update() // TO CHECK
+                                        updateSession() // TO CHECK
                                         reset()
                                         router.push('/itemscontrol/read')
                                     }
@@ -99,7 +103,6 @@ function FormTemplate({
                                 })
                             })
                         } catch (e) {
-                            setIsLoading(true)
                             console.log("error handle submit")
                             setIsLoading(false)
                             // handle your error
@@ -112,6 +115,8 @@ function FormTemplate({
                     formName={formName}
                     items={items}
                     itemTypes={itemTypes}
+                    units={units}
+                    unitEquivalents={unitEquivalents}
                     isPending={isPending}
                     isDirty={isDirty}
                     errors={errors}
@@ -123,6 +128,7 @@ function FormTemplate({
                     watch={watch}
                     reset={reset}
                     setValue={setValue}
+                    setError={setError}
 
                 />
             </form>

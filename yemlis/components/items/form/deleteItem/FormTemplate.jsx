@@ -10,7 +10,7 @@ import FormContent from './FormContent';
 import { useRouter } from 'next/navigation'
 
 function FormTemplate({
-    foodGroups,
+    items,
     formName,
     validation,
     defaultValues,
@@ -36,18 +36,6 @@ function FormTemplate({
             defaultValues: defaultValues,
             resolver: joiResolver(validation/* , { language: 'de' } */)
         })
-
-  /*   useEffect(() => { //TO REMOVE? //TODO
-        console.log("getting use effect")
-        //  setValue("name",user.name)
-        reset({
-            name: foodGroup.name,
-            foodId:foodGroup.foodId,
-            parent: foodGroup.parent,
-            text:foodGroup.text
-            
-        })
-    }, [foodGroup]) */
 
     const getDirtyFields = (dirtyFields, formValues) => {
         let dirtyFieldsValues = {}
@@ -84,7 +72,7 @@ function FormTemplate({
 
                                     if (data.success) {
                                         update() // TO CHECK
-                                        router.push('/foodgroupscontrol/read')
+                                        router.push('/itemscontrol/read')
                                     }
                                     reset()
                                 }).catch((error) => {
@@ -105,7 +93,7 @@ function FormTemplate({
                 name={formName}>
                 <FormContent
                     formName={formName}
-                    foodGroups={foodGroups}
+                    items={items}
                     isPending={isPending}
                     isDirty={isDirty}
                     errors={errors}

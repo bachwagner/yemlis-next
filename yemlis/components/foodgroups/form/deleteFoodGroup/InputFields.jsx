@@ -5,7 +5,7 @@ import OldAndNewPassword from '@/components/user/userBasicSettings/InputPairs/Ol
 import { Autocomplete, Box, Checkbox, Chip, FormControl, FormControlLabel, FormHelperText, TextField, Typography } from '@mui/material'
 import { Controller } from 'react-hook-form'
 
-function FoodGroupCreateInputs(/* {
+function FoodGroupDeleteInputs(/* {
     user,
     errors,
     register,
@@ -55,4 +55,4 @@ function FoodGroupCreateInputs(/* {
     )
 }
 
-export default FoodGroupCreateInputs
+export default FoodGroupDeleteInputs

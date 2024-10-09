@@ -1,30 +1,35 @@
-
 const mongoose = require('mongoose');
 import creationInfos from '../groups/schemas';
 const itemTypesEnum = ["element", "compount", "vitamin"]
 const item = new mongoose.Schema({
     name: {
         type: String,
-        minLength: 1,
+        minLength: 2,
         maxLength: 50,
+    },
+    usdaName: {
+        type: String,
+        minLength: [2, "Too Short Usda Name"],
+        maxLength: [50, "Too Long Usda Name"],
     },
     formula: {
         type: String,
-        minLength: 5,
-        maxLength: 2,
+        minLength: 2,
+        maxLength: 50,
     },
     itemType: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'ItemTypes'
+        ref: 'ItemTypes',
+        minLength: 2,
+        maxLength: 50,
     },
-    standartMeasures:
-        [{
-            unit: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "unit"
-            },
-            isDefault: Boolean
-        }],
+    mainUnit: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Unit',
+        minLength: 2,
+        maxLength: 50,
+    },
+    standartMeasures:[{ type: mongoose.Schema.Types.ObjectId, ref: "UnitEquivalent" }],
     info: {
         type: String,
         minLength: [1, "Too Short Item Info Name"],

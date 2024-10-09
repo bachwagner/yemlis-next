@@ -8,15 +8,18 @@ import { item as itemValidation } from '@/app/lib/validationSchemas'
 import { createItem as itemAction} from '@/app/lib/actions/items';
 
 
-export default function CreateItemForm({ itemTypes }) {
+export default function CreateItemForm({ itemTypes,units,unitEquivalents }) {
 
     const defaultValues = {
+        measureUnits:[]
    }
     return (
 
         itemTypes ? <Box key="item" name="item" display="flex" alignItems="center" justifyContent="center" flexDirection="column" >
             <FormTemplate
                 itemTypes={itemTypes}
+                units={units}
+                unitEquivalents={unitEquivalents}
                 formName="create-item"
                 validation={itemValidation}
                 defaultValues={defaultValues}

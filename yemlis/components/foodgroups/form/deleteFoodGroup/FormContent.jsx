@@ -1,7 +1,7 @@
 import React from 'react'
 import FormFrame from './FormFrame';
 import BasicSettings from './InputFields';
-import FoodGroupCreateInputs from './InputFields';
+import FoodGroupDeleteInputs from './InputFields';
 
 function FormContent({
     formName,
@@ -23,7 +23,7 @@ function FormContent({
             errors={errors}
             serverStatus={serverStatus}
         >
-            <FoodGroupCreateInputs
+            <FoodGroupDeleteInputs
                 foodGroups={foodGroups}
                 errors={errors}
                 register={register}
