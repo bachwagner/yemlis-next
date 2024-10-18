@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { Autocomplete, Box, Checkbox, Chip, FormControl, FormControlLabel, FormHelperText, TextField, Typography } from '@mui/material'
+import { Autocomplete, TextField, Typography } from '@mui/material'
 import { Controller } from 'react-hook-form'
-
+ 
 function UnitCreateInputs(/* {
     user,
     errors,
@@ -17,8 +17,19 @@ function UnitCreateInputs(/* {
     const getValues = props.getValues
     const watch = props.watch
 
-  //  const watchUnitEqs = watch("UnitEqs")
-   
+    const watchUnitEqs = watch("unitEqs")
+    console.log("unitEqss")
+    console.log(unitEqs)
+    console.log("watchUnitEqs")
+    console.log(watchUnitEqs)
+    let selectedUnitEqObj
+    if(watchUnitEqs){
+        selectedUnitEqObj = unitEqs?.find((ue) => ue.name === watchUnitEqs)
+    console.log("query result")
+    console.log(selectedUnitEqObj)
+    }
+    console.log("selectedUnitEqObj")
+    console.log(selectedUnitEqObj)
     return (
         <>
             <TextField
@@ -54,16 +65,33 @@ function UnitCreateInputs(/* {
                             <TextField
                                 {...params}
                                 label="Unit Equivalent"
-                                error={errors.uniteqselect ? true : false}
-                                helperText={errors.uniteqselect && errors.uniteqselect.message} />}
+                                error={errors.unitEqs ? true : false}
+                                helperText={errors.unitEqs && errors.unitEqs.message} />}
                         onChange={(e, data) => { onChange(data) }}
                         {...props}
 
                     />
                 )}
             />
+            <Typography>Unit Equivalent Ana Birimi: {selectedUnitEqObj && selectedUnitEqObj.mainUnit?.name}</Typography>
 
-         
+            <TextField
+                name="equals"
+                label="Unit Oranı"
+                type='number'
+                size='small'
+                disabled={isPending}
+                InputLabelProps={{ shrink: true }}
+                fullWidth
+                inputProps={{
+                    step:0.000000001
+                }}
+                autoComplete="off"
+                error={errors.equals ? true : false}
+                helperText={errors.equals && errors.equals.message}
+                sx={{ width: "400px", mt: 1, mb: 1 }}
+                {...register("equals")}
+            />
             <TextField
                 name="abbr"
                 label="Unit Kısaltması"
@@ -79,6 +107,7 @@ function UnitCreateInputs(/* {
                 {...register("abbr")}
             />
             <TextField
+                
                 name="info"
                 label="Bilgi"
                 multiline

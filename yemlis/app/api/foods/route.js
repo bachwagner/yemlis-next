@@ -7,7 +7,7 @@ import Food from '@/models/food/food'
 import Quantitative from '@/models/quantitatives/quantitative'
 import Unit from '@/models/units/unit'
 import unitEquivalent from '@/models/units/unitEquivalent'
-import Item from '@/models/components/item'
+import Item from '@/models/items/item'
 import Organisation from '@/models/organisations/organisations'
 import { currentUser } from '@/app/lib/auth'
 export async function GET(req) {
@@ -96,6 +96,10 @@ export async function GET(req) {
 
 
         } else {
+            console.log("search foods")
+            console.log("search",search)
+            console.log("offset",offset)
+            console.log("limit",limit)
             const foods = await Food.find({
                 name: { $regex: search, $options: "i" }
             }).skip(offset)

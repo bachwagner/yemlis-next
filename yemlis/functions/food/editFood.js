@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import Food from '../../models/foods/food.js'
 import Unit from '../../models/units/unit.js'
-import Items from '../../models/items/items.js'
+import Items from '../../models/items/items(todelete).js'
 export async function addValue(foodId, value, unitId, nutrientId) {  //name is not required // 5 gram magnesium  
     //if not ids accept string and search
     // foodId must be id

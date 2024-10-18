@@ -7,7 +7,7 @@ import { Controller } from 'react-hook-form'
 import { type } from 'os'
 
 function UnitUpdateInputs
-(/* {
+    (/* {
     user,
     errors,
     register,
@@ -64,7 +64,8 @@ function UnitUpdateInputs
                             //  setValue('oldName', data,{shouldDirty:true}) // //
                             setValue('abbr', getUnitObj.abbr)
                             setValue('info', getUnitObj.info)
-                            setValue('unitEqs', getUnitObj.unitEquivalents.name)
+                            setValue('equals', getUnitObj.equals)
+                            setValue('unitEqs', getUnitObj?.unitEquivalents?.name)
                             /*  reset({
                                  oldName: data,
                                  name: getFoodGroupObj.name,
@@ -128,7 +129,23 @@ function UnitUpdateInputs
                         />
                     )}
                 />
-    
+                <TextField
+                    name="equals"
+                    label="Unit Oranı"
+                    type='number'
+                    size='small'
+                    disabled={isPending}
+                    InputLabelProps={{ shrink: true }}
+                    fullWidth
+                    inputProps={{
+                        step: 0.00000001
+                    }}
+                    autoComplete="off"
+                    error={errors.equals ? true : false}
+                    helperText={errors.equals && errors.equals.message}
+                    sx={{ width: "400px", mt: 1, mb: 1 }}
+                    {...register("equals")}
+                />
                 <TextField
                     name="info"
                     label="Bilgi"
@@ -157,7 +174,7 @@ function UnitUpdateInputs
                     sx={{ width: "400px", mt: 1, mb: 1 }}
                     {...register("abbr")}
                 />
-               </>
+            </>
             )}
 
 

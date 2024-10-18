@@ -39,6 +39,9 @@ const ExpandMore = styled((props) => {
 
 export default function Food({ food }) {
 
+  //console.log("foodd")
+  //console.log(food)
+
   const [expanded, setExpanded] = useState(false);
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -180,7 +183,7 @@ export default function Food({ food }) {
             )}
             {food?.nutritionValues && food.nutritionValues.map((nv, i) => {
               const quantType = i == 0 ? "KJ" : "Kkal" //kcal cal //TODO
-              const shortInfo = nv.name + ": " + nv.value + " " + nv.unit.name
+              const shortInfo = nv.name + ": " + nv.value + " " + nv.unit?.name
               return <Typography sx={{ backgroundColor: (i % 2 == 0) ? "silver" : "inherit" }} key={nv.name + quantType}>{shortInfo} <br /></Typography>
             }
             )}

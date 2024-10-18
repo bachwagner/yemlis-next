@@ -6,7 +6,7 @@ import { deleteItem as deleteItemValidation } from "@/app/lib/validationSchemas"
 
 import { currentUser } from "../auth"
 import { revalidateTag } from 'next/cache'
-import Item from "@/models/components/item"
+import Item from "@/models/items/item"
 import ItemTypes from "@/models/items/itemTypes"
 import Unit from "@/models/units/unit"
 import UnitEquivalent from "@/models/units/unitEquivalent"
@@ -42,11 +42,9 @@ export const createItem = async (values) => {
     console.log(unitEQIDS)
     // IS MAIN UNIT CHILDREN OF UNIT EQUIVALENT
     const unitsUnitEquivalent = isUnitExists.unitEquivalents
-    console.log("unitsUnitEquivalent")
-    console.log(unitsUnitEquivalent)
+   
     const isUnitChild = unitEQIDS.find((ueid) => String(ueid) === String(unitsUnitEquivalent))  // unit, unitEQ'lerin child'ı mı
-    console.log("isUnitChild")
-    console.log(isUnitChild)
+    
 
     if (!isUnitChild) return { error: true, message: "Main Unit ve Unit Equivalent Eşleşmiyor" }
 
@@ -57,19 +55,22 @@ export const createItem = async (values) => {
         info: validatedFields.info,
         itemType: isItemTypeExists._id,
         standartMeasures: unitEQIDS,
-        mainUnit: isUnitExists._id
+        mainUnit: isUnitExists._id,
+        isNutrient: true
+
     }
     const create = await Item.create(createObj)
     if (!create) return { error: true, message: "Item Cannot Be Created" }
     console.log("create")
     console.log(create)
     if (create.error) return { error: true, message: create.message }
-    revalidateTag('Item')
+    revalidateTag('items')
 
     return { success: true, message: "Item Saved" }
 }
 
 export const updateItem = async (values) => {
+    //TODO isNutrient
     console.log("Update Item Values")
     console.log(values)
 
@@ -112,13 +113,6 @@ export const updateItem = async (values) => {
             }
             if (!validatedItem.mainUnit) { //sadece unit eq değiştirmiş, weight çıkarınca main unit kg olarak kalmasını engelle
                 const isUnitChild = unitEQIDS.find((ueid) => String(ueid) === String(item.mainUnit.unitEquivalents))  // unit, unitEQ'lerin child'ı mı
-                console.log("unitEQIDS")
-                console.log(unitEQIDS)
-                console.log("item.mainUnit")
-                console.log(item.mainUnit)
-                console.log("isUnitChild")
-                console.log(isUnitChild)
-
                 if (!isUnitChild) return { error: true, message: "Main Unit ve Unit Equivalent Eşleşmiyor" }
 
             }
@@ -138,11 +132,8 @@ export const updateItem = async (values) => {
             if (!isUnitExists) return { error: true, message: "Unit  Cannot be Found" }
             updateObj.mainUnit = isUnitExists._id // ObjID
             const unitsUnitEquivalent = isUnitExists.unitEquivalents
-            console.log("unitsUnitEquivalent")
-            console.log(unitsUnitEquivalent)
+
             const isUnitChild = unitEQIDS.find((ueid) => String(ueid) === String(unitsUnitEquivalent))  // unit, unitEQ'lerin child'ı mı
-            console.log("isUnitChild")
-            console.log(isUnitChild)
 
             if (!isUnitChild) return { error: true, message: "Main Unit ve Unit Equivalent Eşleşmiyor" }
         }
@@ -151,17 +142,10 @@ export const updateItem = async (values) => {
 
     }
 
-    console.log("updateObj")
-    console.log(updateObj)
-    console.log("oldName")
-    console.log(validatedItem.oldName)
-    console.log(updateObj)
     const update = await Item.findOneAndUpdate({ name: validatedItem.oldName }, updateObj, { new: true })
     if (!update) return { error: true, message: "Item Cannot Be Updated" }
     if (update.error) return { error: true, message: update.message }
-    revalidateTag('Item')
-    console.log("Item Updated")
-    console.log(update)
+    revalidateTag('items')
     return { success: true, message: "Item Updated" }
 }
 
@@ -183,6 +167,8 @@ export const deleteItem = async (values) => {
     if (!deleteItem) {
         return { error: true, message: "Item Cannot Be Deleted" }
     }
+    revalidateTag('items')
+
     return { error: false, success: true, message: "Item Deleted Successfully" }
 
 

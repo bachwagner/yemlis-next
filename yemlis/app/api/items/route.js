@@ -2,7 +2,7 @@
 import connectDB from '@/app/lib/mongodb'
 import { NextResponse } from 'next/server'
 import { currentUser } from '@/app/lib/auth'
-import Item from '@/models/components/item'
+import Item from '@/models/items/item'
 import { auth } from '@/auth'
 export async function GET(req) {
     console.log("Items Get request received")
@@ -21,7 +21,7 @@ export async function GET(req) {
            console.log(name) */
         await connectDB() 
        
-        const items = await Item.find()
+        const items = await Item.find({isNutrient:true})
         .populate({path:"itemType",ref:"itemTypes"})
         .populate({path:"standartMeasures",ref:"standartMeasures"})
         .populate({path:"mainUnit",ref:"mainUnit"})

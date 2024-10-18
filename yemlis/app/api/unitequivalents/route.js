@@ -1,4 +1,3 @@
-//TO REMOVE
 import connectDB from '@/app/lib/mongodb'
 import { NextResponse } from 'next/server'
 import { currentUser } from '@/app/lib/auth'
@@ -20,6 +19,11 @@ export async function GET(req) {
 
         await connectDB()
         const unitEq = await UnitEquivalent.find()
+            .populate({
+                path: "mainUnit",
+                model: "Unit" 
+
+            })
 
         if (unitEq.length === 0 || !unitEq) {
             return NextResponse.json(

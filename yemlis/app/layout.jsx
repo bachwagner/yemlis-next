@@ -8,7 +8,7 @@ import { getFoods } from '@/utils/food';
 const inter = Inter({ subsets: ['latin'] })
 const nunito = Nunito({ subsets: ['latin'] })
 const paytone = Paytone_One({ weight: "400", subsets: ['latin'] })
-
+console.log("nunito")
 export const metadata = {
   title: 'Yemlis',
   description: 'Besin ve Menü Paylaşım Platformu',
@@ -25,7 +25,7 @@ export default async function RootLayout({ children }) {
         <body className={nunito.className}>
           <ThemeRegistry options={{ key: 'mui-theme' }}>
             <main>
-              <Nav />
+              <Nav user={session?.user}/>
               <Box sx={{ flexGrow: 1 }}>
                 <Container sx={{
                   display: "grid",

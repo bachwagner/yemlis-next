@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 import FoodGroups from '../../models/foods/food.js'
 import fs from 'fs'
 import Food from '../../models/foods/food.js'
-import items from '../../models/items/items.js'
+import items from '../../models/items/items(todelete).js'
 
 export async function querySrLegacy(url, limit) { //sr legacy
     try {

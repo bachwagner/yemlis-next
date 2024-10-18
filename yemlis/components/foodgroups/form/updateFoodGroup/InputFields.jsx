@@ -20,7 +20,7 @@ function FoodGroupCreateInputs(/* {
     const reset = props.reset
     const setValue = props.setValue
     const getNoParent = getValues("noParent")
-    //  const getFoodGroup = watch("foodGroup")
+    const getOldName = watch("oldName")
     const allValues = getValues()
     console.log("All Values")
     console.log(allValues)
@@ -86,6 +86,7 @@ function FoodGroupCreateInputs(/* {
                 )}
             />
 
+        {getOldName && (<>
             <Controller
                 control={control}
                 name="name"
@@ -199,6 +200,7 @@ function FoodGroupCreateInputs(/* {
                 />
 
             </>
+        </>)}
 
         </>
     )

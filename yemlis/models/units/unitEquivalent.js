@@ -30,6 +30,11 @@ const unitEquivalent = new mongoose.Schema({
         ref: "Unit",
 
     }],
+    info:{
+        type:String,
+        minLength: [0, "Too Short 'unitEquivalent' info"],
+        maxLength: [255, "Too Long 'unitEquivalent' info"],
+    },
     creationInfos
 
 })

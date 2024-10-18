@@ -40,7 +40,7 @@ async function FoodGroups() {
         {
           list.map((l, i) => {
             return (
-              <><li>
+              <><li key={l.name}>
                 {l.name}
               </li>
                 {l.chd && <Traverse list={l.chd} />}

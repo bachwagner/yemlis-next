@@ -4,15 +4,13 @@ import { foodGroup as foodGroupValidation } from "@/app/lib/validationSchemas"
 import { updateFoodGroup as updateFoodGroupValidation } from "@/app/lib/validationSchemas"
 import { deleteFoodGroup as deleteFoodGroupValidation } from "@/app/lib/validationSchemas"
 
-import User from "@/models/user/user"
 import { currentUser } from "../auth"
 import FoodGroups from "@/models/groups/foodGroups"
 import { revalidateTag } from 'next/cache'
-import Items from "@/models/items/items"
-import itemTypes from "@/models/items/itemTypes"
+
 
 export const createFoodGroup = async (values) => {
-    const validatedItem = await foodGroupValidation.validateAsync(values)
+    const validatedFoodGroup = await foodGroupValidation.validateAsync(values)
     if (!validatedFoodGroup) return { error: true, message: "Invalid Food Group Fields" }
 
     const user = await currentUser()
@@ -46,6 +44,7 @@ export const createFoodGroup = async (values) => {
 }
 export const updateFoodGroup = async (values) => {
     console.log("Update Food Group")
+    console.log(values)
 
     const validatedFoodGroup = await updateFoodGroupValidation.validateAsync(values)
     if (!validatedFoodGroup) return { error: true, message: "Invalid Update Food Group Fields" }
@@ -88,7 +87,7 @@ export const deleteFoodGroup = async (values) => {
     if (!user || user?.role !== "ADMIN") {
         return { error: true, message: "Unauthorized" }
     }
-    const findItem = await FoodGroups.findOne({
+    const findFoodGroup = await FoodGroups.findOne({
         name: validatedFoodGroup.name
     }).populate({
         path: "parent",

@@ -19,35 +19,35 @@ export const UnitsEqsNavbar = () => {
                 <Box
                     display="inline-flex" alignItems="center" justifyContent="center">
                     <Button
-                        href="/unitseqscontrol/read"
+                        href="/uniteqscontrol/read"
                         LinkComponent={Link}
                         sx={{ m: 1 }}
                         variant={
-                            pathname === "/unitseqscontrol/read" ? "outlined" : "contained"}>
+                            pathname === "/uniteqscontrol/read" ? "outlined" : "contained"}>
                         Read
                     </Button>
                     <Button
-                        href="/unitseqscontrol/create"
+                        href="/uniteqscontrol/create"
                         LinkComponent={Link}
                         sx={{ m: 1 }}
                         variant={
-                            pathname === "/unitseqscontrol/create" ? "outlined" : "contained"}>
+                            pathname === "/uniteqscontrol/create" ? "outlined" : "contained"}>
                         Create
                     </Button>
                     <Button
-                        href="/unitseqscontrol/update"
+                        href="/uniteqscontrol/update"
                         LinkComponent={Link}
                         sx={{ m: 1 }}
                         variant={
-                            pathname === "/unitseqscontrol/update" ? "outlined" : "contained"}>
+                            pathname === "/uniteqscontrol/update" ? "outlined" : "contained"}>
                         Update
                     </Button>
                     <Button
-                        href="/unitseqscontrol/delete"
+                        href="/uniteqscontrol/delete"
                         LinkComponent={Link}
                         sx={{ m: 1 }}
                         variant={
-                            pathname === "/unitseqscontrol/delete" ? "outlined" : "contained"}>
+                            pathname === "/uniteqscontrol/delete" ? "outlined" : "contained"}>
                         Delete
                     </Button>
                 </Box>

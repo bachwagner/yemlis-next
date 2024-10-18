@@ -13,6 +13,7 @@ export default function UpdateUnitForm({ units, unitEquivalents }) {
         name: "",
         abbr: "",
         info: "",
+        equals:null,
         unitEqs: null,  // TO CHECK
 
     }

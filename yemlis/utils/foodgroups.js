@@ -1,20 +1,8 @@
-import Food from '@/models/food/food'
-import foodBand from '@/models/groups/foodBand'
-import { options } from 'joi'
-import { cache } from 'react'
-import Unit from '@/models/units/unit'
-import UnitEquivalent from '@/models/units/unitEquivalent'
-import Quantitative from '@/models/quantitatives/quantitative'
-import Item from '@/models/components/item'
-import Organisation from '@/models/organisations/organisations'
-import { currentRole, currentUser } from '@/app/lib/auth'
-import User from '@/models/user/user'
-import assert from 'assert'
 import connectDB from '@/app/lib/mongodb'
-import mongoose from 'mongoose'
 import FoodGroups from '@/models/groups/foodGroups'
+import { unstable_cache } from 'next/cache'
 
-export const getFoodGroups = cache(async () => {
+export const getFoodGroups = unstable_cache(async () => {
 
     try {
         await connectDB()
@@ -31,8 +19,10 @@ export const getFoodGroups = cache(async () => {
         return { error: true, message: "HATA SS: Besin Araması Başarısız Olduu" }
     }
 
-})
-export const getFoodGroup = cache(async (name) => {
+},
+["foodgroups"],
+{ revalidate: 3600, tags: ["foodgroups"] })
+export const getFoodGroup = unstable_cache(async (name) => {
 
     try {
         await connectDB()
@@ -51,8 +41,10 @@ export const getFoodGroup = cache(async (name) => {
         return { error: true, message: "HATA: Besin Grubu Araması Başarısız Oldu" }
     }
 
-})
-export const updateFoodGroups = async () => {
+},
+["foodgroups"],
+{ revalidate: 3600, tags: ["foodgroups"] })
+/* export const updateFoodGroups = async () => {
 
     try {
         await connectDB()
@@ -79,3 +71,4 @@ export const updateFoodGroups = async () => {
 
 }
 
+ */

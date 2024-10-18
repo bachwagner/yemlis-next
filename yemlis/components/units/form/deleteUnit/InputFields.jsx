@@ -38,8 +38,8 @@ function UnitDeleteInputs(/* {
                             <TextField
                                 {...params}
                                 label="Unit"
-                                error={errors.unitselect ? true : false}
-                                helperText={errors.unitselect && errors.unitselect.message} />}
+                                error={errors.name ? true : false}
+                                helperText={errors.name && errors.name.message} />}
                         onChange={(e, data) => { onChange(data) }}
                         {...props}
 

@@ -86,15 +86,13 @@ const LanguageSelector = ({ language, handleChange, isDark }) => {
         </FormControl>
     )
 }
-export default function Nav() {
+export default function Nav({ user }) {
     const [anchorElNav, setAnchorElNav] = useState(null)
     const [anchorElUser, setAnchorElUser] = useState(null)
     const [language, setLanguage] = useState()
     const pathname = usePathname()
 
-    const { data: session, status } = useSession()
-
-    const user = session?.user
+    //const { data: session, status } = useSession()
 
     const isSignIn = false
 
@@ -171,7 +169,7 @@ export default function Nav() {
                             >
                                 <LanguageSelector language={language} onChange={handleChange} isDark={true} />
 
-                                {!isSignIn && signButtons.map((page) => (
+                                {!user && signButtons.map((page) => (
                                     <MenuItem key={page.title} onClick={handleCloseNavMenu}>
                                         <Button
                                             href={page.href}
@@ -226,7 +224,7 @@ export default function Nav() {
                         }}>{user?.email}
                             <LanguageSelector language={language} onChange={handleChange} />
 
-                            {!isSignIn && signButtons.map((page) => (
+                            {!user && signButtons.map((page) => (
                                 <Button
                                     key={page.title}
                                     href={page.href}
@@ -265,7 +263,7 @@ export default function Nav() {
 
                         </Box>
 
-                        <Box sx={{ flexGrow: 0 }}>
+                        {user ? (<Box sx={{ flexGrow: 0 }}>
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }} >
                                 <Avatar alt="profil fotoğrafı mini" >
                                     <AvatarImage imageUrl={user?.image} />
@@ -311,7 +309,19 @@ export default function Nav() {
                                     </MenuItem>
                                 </LogoutButton>
                             </Menu>
+                        </Box>) :
+                        //NONUSER
+                        (
+                            <Box sx={{ flexGrow: 0 }}>
+                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }} >
+                                <Avatar alt="misafir avatar fotoğrafı" >
+                                    ?
+                                </Avatar>
+                            </IconButton>
+
                         </Box>
+                           )}
+
                     </Toolbar>
                 </Container>
             </AppBar>

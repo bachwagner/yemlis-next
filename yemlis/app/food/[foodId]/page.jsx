@@ -76,7 +76,8 @@ export default async function FoodDetails({ params }) {
     const foodId = params.foodId
     if (!foodId) notFound()
     const food = await getFood(foodId)
-
+    //console.log("GCF")
+    //console.log(food)
     if (food.error) {
         notFound()
     }
@@ -207,12 +208,12 @@ export default async function FoodDetails({ params }) {
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                     <Paper sx={{ p: 1 }}>
-                        <GlycemicIndex value={GI}/>
+                        <GlycemicIndex value={GI} />
                     </Paper>
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                     <Paper sx={{ p: 1 }}>
-                       <GlycemicLoad value={GL}/>
+                        <GlycemicLoad value={GL} />
                     </Paper>
                 </Grid>
                 <Grid item xs={12} sm={12} >

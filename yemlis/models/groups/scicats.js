@@ -153,5 +153,7 @@ sciCats.methods.findSimilarTypes = async function () {
     return similars
 };
 
-//module.exports = sciEnums
-export default mongoose.models?.SciCats || mongoose.model('SciCats', sciCats)
+const SciCats = mongoose.models?.SciCats || mongoose.model("SciCats", sciCats)
+export default SciCats
+
+

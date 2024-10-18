@@ -59,6 +59,14 @@ export const Navbar = () => {
                         Items
                     </Button> 
                     <Button
+                        href="/oitemscontrol"
+                        LinkComponent={Link}
+                        sx={{m:1}}
+                        variant={
+                            pathname === "/oitemscontrol" ? "outlined" : "contained"}>
+                       OItems
+                    </Button> 
+                    <Button
                         href="/unitscontrol"
                         LinkComponent={Link}
                         sx={{m:1}}
@@ -67,12 +75,28 @@ export const Navbar = () => {
                         Units
                     </Button> 
                     <Button
-                        href="/unitseqscontrol"
+                        href="/uniteqscontrol"
                         LinkComponent={Link}
                         sx={{m:1}}
                         variant={
-                            pathname === "/unitseqscontrol" ? "outlined" : "contained"}>
+                            pathname === "/uniteqscontrol" ? "outlined" : "contained"}>
                         Unit Equivalents
+                    </Button> 
+                    <Button
+                        href="/basefoods"
+                        LinkComponent={Link}
+                        sx={{m:1}}
+                        variant={
+                            pathname === "/basefoods" ? "outlined" : "contained"}>
+                        BaseFoods
+                    </Button> 
+                    <Button
+                        href="/foodbands"
+                        LinkComponent={Link}
+                        sx={{m:1}}
+                        variant={
+                            pathname === "/foodbands" ? "outlined" : "contained"}>
+                        FoodBands
                     </Button> 
                     <Button
                         href="/settings"

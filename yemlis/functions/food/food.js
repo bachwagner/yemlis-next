@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'  //TO DELETE
 import Food from '../../models/foods/food.js'
 import Unit from '../../models/units/unit.js'
-import Items from '../../models/items/items.js'
+import Items from '../../models/items/items(todelete).js'
 import Quantitative from '../../models/quantitives/quantitative.js'
 
 function adjustNutrientsTo100(nutrients, defaultPortionWeight) {

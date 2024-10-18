@@ -12,7 +12,7 @@ import { Autocomplete, TextField } from '@mui/material';
 export default function UpdateFoodGroupForm({ foodGroups }) {
     // const [state, formAction] = useFormState(authRegister, null);
     const defaultValues = {
-        oldName: "",
+        oldName: null,
         name: "",
         parent: "",
         noParent: "",
